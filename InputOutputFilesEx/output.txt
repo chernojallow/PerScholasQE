@@ -1,0 +1,21 @@
+1) What programming language are we using?
+User answer: C
+Correct answer: C
+
+2) What is Core Java 26 about?
+User answer: A
+Correct answer: B
+
+3) The number of check constraints that can be defined on a column is:
+User answer: D
+Correct answer: D
+
+4) If table A has 10 rows and table B has 5 rows, how many rows will be returned if you perform a cartesian join on those two tables?
+User answer: B
+Correct answer: A
+
+5) What happens when you create a Cartesian product?
+User answer: A
+Correct answer: A
+
+Grade = 60.00

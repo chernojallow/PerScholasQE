@@ -1,0 +1,30 @@
+1) What programming language are we using?
+A. C++
+B. Python
+*C. Java
+D. PHP
+2) What is Core Java 26 about?
+A. Exceptions
+*B. Java I/O
+C. JDBC
+D. Excercise
+3) The number of check constraints that can be defined on a column is:
+A. 16
+B. 17
+C. 18
+*D. There is no limit
+4) If table A has 10 rows and table B has 5 rows, how many rows will be returned if you perform a cartesian join on those two tables?
+*A. 50
+B. 10
+C. 15
+D. 5
+5) What happens when you create a Cartesian product?
+*A. All rows from one table are joined to all rows of another table
+B. No rows are returned as you entered wrong join-criteria
+C. The table is joined to itself, one column to the next column, exhausting all possibilities
+D. All rows that do not match in the WHERE clause are displayed
+6) The SQL DROP TABLE clause is used to...
+A. create a new table in the database
+*B. delete a table from the database
+C. modify an existing table in a database
+D. move a table from one database to another
