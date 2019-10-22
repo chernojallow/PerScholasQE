@@ -26,8 +26,6 @@ public class ClubMemberApp {
 		
 		while (fr.hasNext()) {
 			str.add(new StringBuilder());
-			
-			
 		}
 		
 		fr.close();

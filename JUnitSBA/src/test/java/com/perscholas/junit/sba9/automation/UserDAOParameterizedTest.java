@@ -169,7 +169,6 @@ public class UserDAOParameterizedTest {
 //				u_dao.removeUser(2);
 //				u_dao.removeUser(3);
 //			} catch (IOException | SQLException e) {
-//				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
 		}
