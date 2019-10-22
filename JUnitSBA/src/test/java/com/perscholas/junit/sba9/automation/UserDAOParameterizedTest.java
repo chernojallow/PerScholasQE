@@ -8,6 +8,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeThat;
 import static org.hamcrest.number.OrderingComparison.*;
 
 import java.io.IOException;
@@ -66,6 +67,7 @@ public class UserDAOParameterizedTest {
 
 	@Test
 	public void registerTest() throws InvalidPasswordException {
+		assumeThat(u_dao.testConnection(), is(true));
 		User u = new User();
 		u.setName(name);
 		u.setPassword(password);
@@ -87,6 +89,7 @@ public class UserDAOParameterizedTest {
 
 	@Test
 	public void getTests() {
+		assumeThat(u_dao.testConnection(), is(true));
 		List<User> userList = null;
 		User u = null;
 

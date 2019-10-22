@@ -26,7 +26,7 @@ public class UserDAO {
 	} // End of cleanUp() method
 	
 	// ****************testConnection() method*****************
-	public void testConnection() {
+	public Boolean testConnection() {
 		DBConnection dbConn = new DBConnection();
 		try {
 			dbConn.getConnection();
@@ -34,6 +34,7 @@ public class UserDAO {
 		} catch (Exception e) {
 			System.out.println("testConnection failed.");
 		}
+		return true;
 	} // End of testConnection() method
 
 	// ****************getAll() method*****************
