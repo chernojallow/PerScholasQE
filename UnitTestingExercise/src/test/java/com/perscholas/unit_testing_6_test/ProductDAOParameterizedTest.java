@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,7 +55,7 @@ public class ProductDAOParameterizedTest {
     public static void setUp() {
     	p_dao = new ProductDAO();
     }
-
+    
     // Run the test
     @Test
     public void productDAOTest() {

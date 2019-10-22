@@ -15,9 +15,9 @@ public class ProductDAO {
 		DBConnection dbConn = new DBConnection();
 		try {
 			dbConn.getConnection();
-			System.out.println("Main method test connection succeed");
+			System.out.println("testConnection succeed");
 		} catch (Exception e){
-			System.out.println("Database connection failed.");
+			System.out.println("testConnection failed.");
 		}
 	}
 	
