@@ -9,9 +9,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.perscholas.casestudy.rms_models.Category;
+import com.perscholas.casestudy.rms_models.Table;
 
-public class CategoryDAO {
+public class TableDAO {
 	// ****************testConnection() method*****************
 	public void testConnection() {
 		DBConnection dbConn = new DBConnection();
@@ -24,16 +24,16 @@ public class CategoryDAO {
 	}
 
 	// ****************getAll() method*****************
-	public List<Category> getAll() throws SQLException {
+	public List<Table> getAll() throws SQLException {
 		// Declare variables
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
-		Category c = null;
-		List<Category> categoryList = null;
+		Table t = null;
+		List<Table> tableList = null;
 
 		// Assign query string to a string
-		String qString = "SELECT * FROM category;";
+		String qString = "SELECT * FROM `table`;";
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
 
@@ -48,17 +48,17 @@ public class CategoryDAO {
 			// Run query and assign to the ResultSet instance
 			rs = stmt.executeQuery(qString);
 			// Create list to hold objects
-			categoryList = new ArrayList<Category>();
+			tableList = new ArrayList<Table>();
 			// Read the ResultSet instance
 			while (rs.next()) {
 				// Each iteration creates a new object
-				c = new Category();
+				t = new Table();
 				// Assign columns/fields to related fields in the object
 				// Represent column numbers/positions
-				c.setCategoryID(rs.getInt(1));
-				c.setCategoryName(rs.getString(2));
+				t.setTableID(rs.getInt(1));
+				t.setUserID(rs.getInt(2));
 				// Add the user to the list
-				categoryList.add(c);
+				tableList.add(t);
 				// Repeat until rs.next() returns false (i.e., end of ResultSet)
 			}
 		} catch (ClassNotFoundException | IOException | SQLException e) {
@@ -72,21 +72,21 @@ public class CategoryDAO {
 			if (conn != null)
 				conn.close();
 		}
-		return categoryList;
+		return tableList;
 	} // End of getAll() method
 
 	// ****************register() method*****************
-	public Integer register(Category category) throws SQLException, ClassNotFoundException, IOException {
+	public Integer register(Table table) throws SQLException, ClassNotFoundException, IOException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 
 		// Assign insert statement string to variable
-		String insertString = "INSERT INTO category (`categoryName`) VALUES (?);";
+		String insertString = "INSERT INTO `table` (`userID`) VALUES (?);";
 
 		int ID = -1;
-		String[] COL = { "`categoryID`" };
+		String[] COL = { "`tableID`" };
 
 		DBConnection dbConn = new DBConnection();
 
@@ -94,7 +94,7 @@ public class CategoryDAO {
 			conn = dbConn.getConnection();
 			stmt = conn.prepareStatement(insertString, COL);
 
-			stmt.setString(1, category.getCategoryName());
+			stmt.setInt(1, table.getUserID());
 
 			stmt.executeUpdate();
 
@@ -118,15 +118,15 @@ public class CategoryDAO {
 	} // End of register() method
 
 	// ****************getByID() method*****************
-	public Category getByID(Integer categoryID) throws ClassNotFoundException, IOException, SQLException {
+	public Table getByID(Integer tableID) throws ClassNotFoundException, IOException, SQLException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		Category c = null;
+		Table t = null;
 
 		// Assign query string to variable
-		String qString = "SELECT * FROM category WHERE `categoryID` = ?;";
+		String qString = "SELECT * FROM `table` WHERE `tableID` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -138,16 +138,16 @@ public class CategoryDAO {
 			stmt = conn.prepareStatement(qString);
 
 			// Set query parameters (?)
-			stmt.setInt(1, categoryID); // ID if from String parameter passed to method
+			stmt.setInt(1, tableID); // ID if from String parameter passed to method
 
 			// Run query and assign to ResultSet
 			rs = stmt.executeQuery();
 
 			// Retrieve ResultSet and assign to new object
 			if (rs.next()) {
-				c = new Category();
-				c.setCategoryID(rs.getInt(1));
-				c.setCategoryName(rs.getString(2));
+				t = new Table();
+				t.setTableID(rs.getInt(1));
+				t.setUserID(rs.getInt(2));
 			}
 		} catch (ClassNotFoundException | IOException | SQLException e) {
 			System.out.println("Error: " + e.getMessage());
@@ -160,61 +160,18 @@ public class CategoryDAO {
 			if (conn != null)
 				conn.close();
 		}
-		return c;
+		return t;
 	} // End of getByID() method
 
-	// ****************getByName or login method*****************
-	public Category getByName(String categoryName) throws ClassNotFoundException, IOException, SQLException {
-		// Declare variables
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		Category c = null;
-
-		// Assign query string to variable
-		String qString = "SELECT * FROM category WHERE `categoryName` = ?;";
-
-		// Create DBConnection class instance
-		DBConnection dbConn = new DBConnection();
-		// Begin try/catch block to query the database
-		try {
-			// Connect to database and assign query string to PreparedStatement object
-			conn = dbConn.getConnection();
-			stmt = conn.prepareStatement(qString);
-
-			// Set query parameters (?)
-			stmt.setString(1, categoryName); // ID if from String parameter passed to method
-			// Run query and assign to ResultSet
-			rs = stmt.executeQuery();
-			// Retrieve ResultSet and assign to new object
-			if (rs.next()) {
-				c = new Category();
-				c.setCategoryID(rs.getInt(1));
-				c.setCategoryName(rs.getString(2));
-			}
-		} catch (ClassNotFoundException | IOException | SQLException e) {
-			System.out.println("Error: " + e.getMessage());
-			System.out.println(e.getStackTrace());
-		} finally {
-			if (rs != null)
-				rs.close();
-			if (stmt != null)
-				stmt.close();
-			if (conn != null)
-				conn.close();
-		}
-		return c;
-	} // End of getByName() method
-
 	// ****************update() method*****************
-	public Boolean update(Category c) throws SQLException, ClassNotFoundException, IOException {
+	public Boolean update(Table t) throws SQLException, ClassNotFoundException, IOException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		Integer updateResult = null;
 
 		// Assign update string to variable
-		String updateString = "UPDATE category SET `categoryName` = ? WHERE `categoryID` = ?;";
+		String updateString = "UPDATE `table` SET `userID` = ? WHERE `tableID` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -225,8 +182,9 @@ public class CategoryDAO {
 			stmt = conn.prepareStatement(updateString);
 
 			// Set query parameters (?)
-			stmt.setString(1, c.getCategoryName());
-			stmt.setInt(2, c.getCategoryID());
+			stmt.setInt(1, t.getUserID());
+			stmt.setInt(2, t.getTableID());
+
 			// Run query and assign to ResultSet
 			updateResult = stmt.executeUpdate();
 		} catch (ClassNotFoundException | SQLException e) {
@@ -243,14 +201,14 @@ public class CategoryDAO {
 	} // End of update() method
 
 	// ****************remove() method (i.e., delete)*****************
-	public Boolean remove(Integer categoryID) throws IOException, SQLException {
+	public Boolean remove(Integer tableID) throws IOException, SQLException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		Integer updateResult = null;
 
 		// Assign delete string to variable
-		String deleteString = "DELETE FROM category WHERE `categoryID` = ?;";
+		String deleteString = "DELETE FROM `table` WHERE `tableID` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -261,7 +219,7 @@ public class CategoryDAO {
 			stmt = conn.prepareStatement(deleteString);
 
 			// Set query parameters (?)
-			stmt.setInt(1, categoryID);
+			stmt.setInt(1, tableID);
 			// Run query and assign to ResultSet
 			updateResult = stmt.executeUpdate();
 		} catch (ClassNotFoundException | SQLException e) {
@@ -276,5 +234,6 @@ public class CategoryDAO {
 			return true;
 		return false;
 	}// End of remove() method
-	
+
 }
+

@@ -4,7 +4,7 @@ public class Item {
 	private Integer itemID;
 	private String itemName;
 	private Integer categoryID;
-	private Integer price;
+	private Double price;
 	
 	// Constructors
 	public Item() {
@@ -14,7 +14,7 @@ public class Item {
 		this.price = null;
 	}
 
-	public Item(Integer itemID, String itemName, Integer categoryID, Integer price) {
+	public Item(Integer itemID, String itemName, Integer categoryID, Double price) {
 		super();
 		this.itemID = itemID;
 		this.itemName = itemName;
@@ -47,11 +47,11 @@ public class Item {
 		this.categoryID = categoryID;
 	}
 
-	public Integer getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Integer price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 }

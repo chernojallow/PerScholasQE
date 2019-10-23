@@ -17,4 +17,11 @@ public class ConvertTime {
 
 		return obj;
 	}
+	
+	public static void main(String[] args) {
+		LocalDateTime ldt = LocalDateTime.now();
+		Timestamp ts = new Timestamp(System.currentTimeMillis());
+		System.out.println(ldt);
+		System.out.println(ts);
+	}
 }
