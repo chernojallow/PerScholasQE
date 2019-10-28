@@ -10,11 +10,14 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.perscholas.casestudy.rms.daos.ItemDAO;
 import com.perscholas.casestudy.rms_models.Item;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ItemDAOTests {
 	private static ItemDAO i_dao;
 
@@ -37,7 +40,7 @@ public class ItemDAOTests {
 			assertThat(itemList.get(4).getItemName().toString(), equalTo("hey2"));
 			assertThat(itemList.get(5).getItemName().toString(), equalTo("hi2"));
 			assertThat(itemList.get(6).getPrice().toString(), is("23.54"));
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

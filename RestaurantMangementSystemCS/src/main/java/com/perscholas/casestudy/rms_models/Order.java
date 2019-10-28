@@ -6,7 +6,6 @@ public class Order {
 	private Integer orderID;
 	private Integer userID;
 	private Integer tableID;
-	private String name;
 	private Timestamp time;
 
 	// Constructors
@@ -14,15 +13,13 @@ public class Order {
 		this.orderID = null;
 		this.userID = null;
 		this.tableID = null;
-		this.name = null;
 		this.time = null;
 	}
 	
-	public Order(Integer orderID, Integer userID, Integer tableID, String name, Timestamp time) {
+	public Order(Integer orderID, Integer userID, Integer tableID, Timestamp time) {
 		this.orderID = orderID;
 		this.userID = userID;
 		this.tableID = tableID;
-		this.name = name;
 		this.time = time;
 	}
 
@@ -49,14 +46,6 @@ public class Order {
 
 	public void setTableID(Integer tableID) {
 		this.tableID = tableID;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	public Timestamp getTime() {

@@ -10,11 +10,14 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.perscholas.casestudy.rms.daos.CategoryDAO;
 import com.perscholas.casestudy.rms_models.Category;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CategoryDAOTests {
 	private static CategoryDAO c_dao;
 
@@ -36,7 +39,7 @@ public class CategoryDAOTests {
 			assertThat(categoryList.get(2).getCategoryID().toString(), is("3"));
 			assertThat(categoryList.get(0).getCategoryName().toString(), equalTo("hello"));
 			assertThat(categoryList.get(1).getCategoryName().toString(), equalTo("hey"));
-			assertThat(categoryList.get(2).getCategoryName().toString(), equalTo("hi"));
+			assertThat(categoryList.get(2).getCategoryName().toString(), equalTo("ayyy"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -81,12 +84,12 @@ public class CategoryDAOTests {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void CategoryUpdateTest() {
 		assumeThat(c_dao.testConnection(), equalTo(true));
 		Category c = new Category(3, "ayyy");
-		
+
 		try {
 			c_dao.update(c);
 			assertThat(c.getCategoryID(), equalTo(3));
@@ -107,5 +110,5 @@ public class CategoryDAOTests {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

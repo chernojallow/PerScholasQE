@@ -93,7 +93,7 @@ public class OrderItemsDAO {
 		try {
 			conn = dbConn.getConnection();
 			stmt = conn.prepareStatement(insertString);
-			
+
 			stmt.setInt(1, orderItem.getOrderID());
 			stmt.setInt(2, orderItem.getCategoryID());
 			stmt.setInt(3, orderItem.getQuantity());
@@ -114,7 +114,8 @@ public class OrderItemsDAO {
 	} // End of register() method
 
 	// ****************getByID() method*****************
-	public OrderItems getByID(Integer orderID) throws ClassNotFoundException, IOException, SQLException {
+	public OrderItems getByID(Integer orderID, Integer categoryID)
+			throws ClassNotFoundException, IOException, SQLException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -122,7 +123,7 @@ public class OrderItemsDAO {
 		OrderItems oi = null;
 
 		// Assign query string to variable
-		String qString = "SELECT * FROM `order_items` WHERE `orderID` = ?;";
+		String qString = "SELECT * FROM `order_items` WHERE `orderID` = ? && `categoryID` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -135,6 +136,7 @@ public class OrderItemsDAO {
 
 			// Set query parameters (?)
 			stmt.setInt(1, orderID); // ID if from String parameter passed to method
+			stmt.setInt(2, categoryID); // ID if from String parameter passed to method
 
 			// Run query and assign to ResultSet
 			rs = stmt.executeQuery();
@@ -161,14 +163,14 @@ public class OrderItemsDAO {
 	} // End of getByID() method
 
 	// ****************update() method*****************
-	public Boolean update(OrderItems oi) throws SQLException, ClassNotFoundException, IOException {
+	public Boolean update(OrderItems oi, Integer oCategoryID) throws SQLException, ClassNotFoundException, IOException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		Integer updateResult = null;
 
 		// Assign update string to variable
-		String updateString = "UPDATE `order_items` SET `categoryID` = ?, `quantity` = ? WHERE `orderID` = ?;";
+		String updateString = "UPDATE `order_items` SET `categoryID` = ?, `quantity` = ? WHERE `orderID` = ? && `categoryID` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -182,6 +184,8 @@ public class OrderItemsDAO {
 			stmt.setInt(1, oi.getCategoryID());
 			stmt.setInt(2, oi.getQuantity());
 			stmt.setInt(3, oi.getOrderID());
+			stmt.setInt(4, oCategoryID);
+
 			// Run query and assign to ResultSet
 			updateResult = stmt.executeUpdate();
 		} catch (ClassNotFoundException | SQLException e) {
@@ -198,14 +202,14 @@ public class OrderItemsDAO {
 	} // End of update() method
 
 	// ****************remove() method (i.e., delete)*****************
-	public Boolean remove(Integer orderID) throws IOException, SQLException {
+	public Boolean remove(Integer orderID, Integer categoryID) throws IOException, SQLException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		Integer updateResult = null;
 
 		// Assign delete string to variable
-		String deleteString = "DELETE FROM `order_items` WHERE `orderID` = ?;";
+		String deleteString = "DELETE FROM `order_items` WHERE `orderID` = ? && `categoryID` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -217,6 +221,8 @@ public class OrderItemsDAO {
 
 			// Set query parameters (?)
 			stmt.setInt(1, orderID);
+			stmt.setInt(2, categoryID);
+
 			// Run query and assign to ResultSet
 			updateResult = stmt.executeUpdate();
 		} catch (ClassNotFoundException | SQLException e) {
@@ -231,6 +237,5 @@ public class OrderItemsDAO {
 			return true;
 		return false;
 	}// End of remove() method
-	
-}
 
+}

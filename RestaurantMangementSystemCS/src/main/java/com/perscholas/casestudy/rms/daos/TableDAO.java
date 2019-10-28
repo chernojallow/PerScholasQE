@@ -104,7 +104,6 @@ public class TableDAO {
 			if (rs != null && rs.next()) {
 				ID = rs.getInt(1);
 			}
-			System.out.println(ID);
 		} catch (SQLException e) {
 			System.out.println("Error: " + e.getMessage());
 		} finally {
@@ -120,7 +119,7 @@ public class TableDAO {
 	} // End of register() method
 
 	// ****************getByID() method*****************
-	public Table getByID(Integer tableID) throws ClassNotFoundException, IOException, SQLException {
+	public Table getByID(Integer tableID, Integer userID) throws ClassNotFoundException, IOException, SQLException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -128,7 +127,7 @@ public class TableDAO {
 		Table t = null;
 
 		// Assign query string to variable
-		String qString = "SELECT * FROM `table` WHERE `tableID` = ?;";
+		String qString = "SELECT * FROM `table` WHERE `tableID` = ? && `userID` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -141,6 +140,7 @@ public class TableDAO {
 
 			// Set query parameters (?)
 			stmt.setInt(1, tableID); // ID if from String parameter passed to method
+			stmt.setInt(2, userID); // ID if from String parameter passed to method
 
 			// Run query and assign to ResultSet
 			rs = stmt.executeQuery();
@@ -166,14 +166,14 @@ public class TableDAO {
 	} // End of getByID() method
 
 	// ****************update() method*****************
-	public Boolean update(Table t) throws SQLException, ClassNotFoundException, IOException {
+	public Boolean update(Table t, Integer oUserID) throws SQLException, ClassNotFoundException, IOException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		Integer updateResult = null;
 
 		// Assign update string to variable
-		String updateString = "UPDATE `table` SET `userID` = ? WHERE `tableID` = ?;";
+		String updateString = "UPDATE `table` SET `userID` = ? WHERE `tableID` = ? && `userID` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -186,6 +186,7 @@ public class TableDAO {
 			// Set query parameters (?)
 			stmt.setInt(1, t.getUserID());
 			stmt.setInt(2, t.getTableID());
+			stmt.setInt(3, oUserID);
 
 			// Run query and assign to ResultSet
 			updateResult = stmt.executeUpdate();

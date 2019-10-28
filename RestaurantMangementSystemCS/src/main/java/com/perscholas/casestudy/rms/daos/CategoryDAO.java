@@ -104,7 +104,6 @@ public class CategoryDAO {
 			if (rs != null && rs.next()) {
 				ID = rs.getInt(1);
 			}
-			System.out.println(ID);
 		} catch (SQLException e) {
 			System.out.println("Error: " + e.getMessage());
 		} finally {
