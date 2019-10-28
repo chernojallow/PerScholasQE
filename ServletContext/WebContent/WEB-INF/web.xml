@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+	<display-name>ServletContext</display-name>
+	<context-param>
+		<param-name>context_param_example</param-name>
+		<param-value>
+	This is a context param available to all servlets
+	of this web application
+    </param-value>
+	</context-param>
+	<servlet>
+		<servlet-name>XmlServlet</servlet-name>
+		<servlet-class>com.perscholas.servletcontext.XmlServlet</servlet-class>
+		<init-param>
+			<param-name>servlet_init_param</param-name>
+			<param-value>
+		This is an init param available only to this servlet.
+	  </param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>XmlServlet</servlet-name>
+		<url-pattern>/XmlServlet</url-pattern>
+	</servlet-mapping>
+</web-app>
