@@ -8,7 +8,7 @@
 </head>
 <body>
 	<header> <h1>Log In</h1> </header>
-	
+	<!--
 	<% if (request.getAttribute("loginError") != null) {%>
 	    <p style="color: red;"><%= request.getAttribute("loginError") %></p>
 	<% } %>
@@ -16,7 +16,9 @@
 	<% if (request.getAttribute("regSuccess") != null) {%>
 	    <p style="color: green;"><%= request.getAttribute("regSuccess") %></p>
 	<% } %>
-	
+	-->
+	<p style="color:red;">${loginError}</p>
+	<p style="color:red;">${regSuccess}</p>
 	<form action="redirect.jsp" method="post">
 		<p> <label>User Name:&nbsp;<input type="text" name="loginUsername" required/> </label> </p>
 		<p> <label>Password:&nbsp;<input type="password" name="loginPassword" required/> </label> </p>

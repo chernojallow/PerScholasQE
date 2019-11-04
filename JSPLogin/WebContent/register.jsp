@@ -8,10 +8,12 @@
 </head>
 <body>
 	<header> <h1>Create Account</h1> </header>
-	
+	<!-- 
 	<% if (request.getAttribute("regError") != null) {%>
 	    <p style="color: red;"><%= request.getAttribute("regError") %></p>
 	<% } %>
+	-->
+	<p style="color: red;">${regError}</p>
 	
     <form action="redirect.jsp" method="POST">
         <p> <label>First Name:&nbsp;<input type="text" name="regFirstName" required/> </label> </p>
