@@ -12,57 +12,55 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.perscholas.software_developer_club.models.Event;
+import com.perscholas.software_developer_club.models.Member;
 
 public class EventDAO {
-
-	// ****************getAllEvents() method*****************
+	
+	//****************getAllEvents() method*****************
 
 	public List<Event> getAllEvents() throws SQLException {
-		// Declare variables
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 		Event event = null;
 		List<Event> eventList = null;
 
-		// Assign query string to a variable
 		String qString = "select * from events";
 
-		// Create MySqlConnection class instance
 		DatabaseConnection databaseConnection = new DatabaseConnection();
 
-		// Begin try/catch block to query the database
-		try {
+		try
+		{
 			// Connect to database
 			conn = databaseConnection.getConnection();
 			// If the connection fails the application won't make it to this point
 			System.out.println("Connected to database.");
-			// Create Statement instance/object
+
 			stmt = conn.createStatement();
 
-			// Run query and assign to the ResultSet instance
 			rs = stmt.executeQuery(qString);
-			// Create list to hold User objects
-			eventList = new ArrayList<Event>();
-			// Read the ResultSet instance
+			eventList = new ArrayList<>();
+			// Outer loop creates the event objects and add them to a list of events
 			while (rs.next()) {
 				event = new Event();
-
+				
 				event.setEventId(rs.getInt(1));
 				event.setTitle(rs.getString(2));
 				event.setDescription(rs.getString(3));
 				event.setLocation(rs.getString(4));
 				event.setDateTime(rs.getTimestamp(5).toLocalDateTime());
-				event.setMemberId(rs.getInt(6));
-
-				// Add the user to the list
+				event.setMemberId(rs.getInt(6));			
+				event.setEventAttenders(getAttendersByEventId(event.getEventId()));
 				eventList.add(event);
-				// Repeat until rs.next() returns false (i.e., end of ResultSet)
 			}
-		} catch (ClassNotFoundException | IOException | SQLException e) {
+		}
+		catch (ClassNotFoundException | IOException | SQLException e)
+		{
 			System.out.println("Error: " + e.getMessage());
 			e.getStackTrace();
-		} finally {
+		}
+		finally
+		{
 			if (rs != null) {
 				rs.close();
 			}
@@ -74,44 +72,94 @@ public class EventDAO {
 			}
 		}
 		return eventList;
-	} // End of getAllEvents method
-
-	// ****************createEvent() method*****************
-
+	} // End of getAllEvents method	
+	
+	private List<Member> getAttendersByEventId(Integer eventId) 
+			throws SQLException {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Member member = null;
+		List<Member> eventAttenders = null;
+		
+		String qString = "select members.member_id, members.name, members.email, members.password, "
+				+ "members.favorite_language from members join signups on members.member_id = "
+				+ "signups.members_member_id where signups.events_event_id = ?";
+		
+		DatabaseConnection databaseConnection = new DatabaseConnection();
+		try {
+			conn = databaseConnection.getConnection();
+			pstmt = conn.prepareStatement(qString);
+			pstmt.setInt(1, eventId);
+			rs = pstmt.executeQuery();
+			eventAttenders = new ArrayList<>();
+			while (rs.next()) {
+				member = new Member();
+				member.setMemberId(rs.getInt(1));
+				member.setName(rs.getString(2));
+				member.setEmail(rs.getString(3));
+				member.setPassword(rs.getString(4));
+				member.setFavoriteLanguage(rs.getString(5));
+				eventAttenders.add(member);
+			}
+		} catch (ClassNotFoundException | IOException | SQLException e) {
+			e.getMessage();
+		}
+		finally
+		{
+			if (rs != null) {
+				rs.close();
+			}
+			if (pstmt != null) {
+				pstmt.close();
+			}
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return eventAttenders;
+	}
+	//****************createEvent() method*****************
+	
 	public Integer createEvent(Event event) throws SQLException, ClassNotFoundException, IOException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-
+		
 		// Assign insert statement string to variable
-		String insertString = "insert into events (title, description, location, date_time, events_member_id) values (?,?,?,?,?)";
-
-		int ID = -1;
-		String[] COL = { "event_id" };
-
-		DatabaseConnection databaseConnection = new DatabaseConnection();
-
-		try {
-			conn = databaseConnection.getConnection();
-			stmt = conn.prepareStatement(insertString, COL);
-
-			stmt.setString(1, event.getTitle());
-			stmt.setString(2, event.getDescription());
-			stmt.setString(3, event.getLocation());
-			stmt.setTimestamp(4, Timestamp.from(event.getDateTime().toInstant(ZoneOffset.ofHours(-4))));
-			stmt.setInt(5, event.getMemberId());
-
-			stmt.executeUpdate();
-
-			rs = stmt.getGeneratedKeys();
-			if (rs != null && rs.next()) {
-				ID = rs.getInt(1);
-			}
-			System.out.println(ID);
-		} catch (SQLException e) {
+		String insertString = "insert into events (title, description, location, date_time, members_member_id) values (?,?,?,?,?)";
+		
+	    int ID = -1;
+	    String[] COL = {"event_id"};
+	    
+	    DatabaseConnection databaseConnection = new DatabaseConnection();
+	    
+	    try
+	    {
+	        conn = databaseConnection.getConnection();
+	        stmt = conn.prepareStatement(insertString, COL);
+	        
+	        stmt.setString(1, event.getTitle());
+	        stmt.setString(2, event.getDescription());
+	        stmt.setString(3, event.getLocation());
+	        stmt.setTimestamp(4, Timestamp.from(event.getDateTime().toInstant(ZoneOffset.ofHours(-4))));
+	        stmt.setInt(5, event.getMemberId());
+	        
+	        stmt.executeUpdate();
+	        
+	        rs = stmt.getGeneratedKeys();
+	        if(rs != null && rs.next()) {
+	            ID = rs.getInt(1);
+	        }
+	        System.out.println(ID);
+	    }
+	    catch (SQLException e)
+		{
 			System.out.println("Error: " + e.getMessage());
-		} finally {
+		}
+		finally
+		{
 			if (rs != null) {
 				rs.close();
 			}
@@ -122,10 +170,10 @@ public class EventDAO {
 				conn.close();
 			}
 		}
-
+	    
 		return ID;
 	} // End of createEvent() method
-
+	
 //	//****************getUserById() method*****************
 //
 //	public User getUserById(int userId) throws ClassNotFoundException, IOException, SQLException {
@@ -283,48 +331,48 @@ public class EventDAO {
 //		return false;
 //	} // End of updateUser() method
 //	
-//	//****************removeUser() method (i.e., delete)*****************
-//	
-//	public Boolean removeUser(int userId) throws IOException, SQLException {
-//		// Declare variables
-//		Connection conn = null;
-//		PreparedStatement stmt = null;
-//		Integer updateResult = null;
-//		
-//		// Assign delete string to variable
-//		String deleteString = "delete from users where user_id = ?";
-//		
-//		// Create MySqlConnection class instance
-//		MySqlConnection mysql = new MySqlConnection();
-//		// Begin try/catch block to query the database
-//		try
-//		{
-//			// Connect to database and assign query string to PreparedStatement object
-//			conn = mysql.getConnection();
-//			stmt = conn.prepareStatement(deleteString);
-//			
-//			// Set query parameters (?)
-//			stmt.setInt(1, userId);
-//			// Run query and assign to ResultSet
-//			updateResult = stmt.executeUpdate();
-//		}
-//		catch (ClassNotFoundException | SQLException e)
-//		{
-//			System.out.println("Error: " + e.getMessage());
-//		}
-//		finally
-//		{
-//			if (stmt != null) {
-//				stmt.close();
-//			}
-//			if (conn != null) {
-//				conn.close();
-//			}
-//		}
-//		if (updateResult > 0) {
-//			return true;
-//		}
-//		return false;
-//	} // End of removeUser() method
-//	
-} // End of UserDAO class
+	//****************removeEvent() method (i.e., delete)*****************
+	
+	public Boolean removeEvent(Integer eventId) throws IOException, SQLException {
+		// Declare variables
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		Integer updateResult = null;
+		
+		// Assign delete string to variable
+		String deleteString = "delete from events where event_id = ?";
+		
+		// Create MySqlConnection class instance
+		DatabaseConnection databaseConnection = new DatabaseConnection();
+		// Begin try/catch block to query the database
+		try
+		{
+			// Connect to database and assign query string to PreparedStatement object
+			conn = databaseConnection.getConnection();
+			stmt = conn.prepareStatement(deleteString);
+			
+			// Set query parameters (?)
+			stmt.setInt(1, eventId);
+			// Run query and assign to ResultSet
+			updateResult = stmt.executeUpdate();
+		}
+		catch (ClassNotFoundException | SQLException e)
+		{
+			System.out.println("Error: " + e.getMessage());
+		}
+		finally
+		{
+			if (stmt != null) {
+				stmt.close();
+			}
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		if (updateResult > 0) {
+			return true;
+		}
+		return false;
+	} // End of removeEvent() method
+	
+} // End of EventDAO class

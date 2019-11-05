@@ -47,16 +47,27 @@
 				<td>${event.location}</td>
 				<td>${event.dateTime}</td>
 				<td>
+					<!--Outer condition -->
 					<c:choose>
 						<c:when test = "${currentMember.memberId == event.memberId}">
 			            	<a href="#">Delete</a>
 			         	</c:when>
 						<c:otherwise>
 						
-							<a href="#">Signup/Cancel</a>
-						
+							<!-- Inner condition -->
+							<c:choose>
+								<c:when test="${event.attendersContainsIdStream(currentMember.memberId)}">
+									<a href="${pageContext.request.contextPath}/HomeServlet/cancelSignup?memberId=${currentMember.memberId}&eventId=${event.eventId}">Cancel</a>
+								</c:when>
+								<c:otherwise>
+									<a href="${pageContext.request.contextPath}/HomeServlet/signupForEvent?memberId=${currentMember.memberId}&eventId=${event.eventId}">Signup</a>
+								</c:otherwise>
+							</c:choose>		
+							<!-- End inner condition -->
+									
 						</c:otherwise>
 		      		</c:choose>
+		      		<!-- End outer condition -->
 				</td>
 			</tr>
 		</c:forEach>

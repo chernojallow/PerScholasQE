@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import com.perscholas.software_developer_club.models.Member;
 
 public class MemberDAO {
-
+	
 //	//****************getAllUsers() method*****************
 //
 //	public List<User> getAllUsers() throws SQLException {
@@ -74,41 +74,46 @@ public class MemberDAO {
 //		return userList;
 //	} // End of getAllUsers method	
 //	
-	// ****************registerMember() method*****************
-
+	//****************registerMember() method*****************
+	
 	public Integer registerMember(Member member) throws SQLException, ClassNotFoundException, IOException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-
+		
 		// Assign insert statement string to variable
 		String insertString = "insert into members (name, email, password, favorite_language) values (?,?,?,?)";
-
-		int ID = -1;
-		String[] COL = { "member_id" };
-
-		DatabaseConnection databaseConnection = new DatabaseConnection();
-
-		try {
-			conn = databaseConnection.getConnection();
-			stmt = conn.prepareStatement(insertString, COL);
-
-			stmt.setString(1, member.getName());
-			stmt.setString(2, member.getEmail());
-			stmt.setString(3, member.getPassword());
-			stmt.setString(4, member.getFavoriteLanguage());
-
-			stmt.executeUpdate();
-
-			rs = stmt.getGeneratedKeys();
-			if (rs != null && rs.next()) {
-				ID = rs.getInt(1);
-			}
-			System.out.println(ID);
-		} catch (SQLException e) {
+		
+	    int ID = -1;
+	    String[] COL = {"member_id"};
+	    
+	   DatabaseConnection databaseConnection = new DatabaseConnection();
+	    
+	    try
+	    {
+	        conn = databaseConnection.getConnection();
+	        stmt = conn.prepareStatement(insertString, COL);
+	        
+	        stmt.setString(1, member.getName());
+	        stmt.setString(2, member.getEmail());
+	        stmt.setString(3, member.getPassword());
+	        stmt.setString(4, member.getFavoriteLanguage());
+	        
+	        stmt.executeUpdate();
+	        
+	        rs = stmt.getGeneratedKeys();
+	        if(rs != null && rs.next()) {
+	            ID = rs.getInt(1);
+	        }
+	        System.out.println(ID);
+	    }
+	    catch (SQLException e)
+		{
 			System.out.println("Error: " + e.getMessage());
-		} finally {
+		}
+		finally
+		{
 			if (rs != null) {
 				rs.close();
 			}
@@ -119,10 +124,10 @@ public class MemberDAO {
 				conn.close();
 			}
 		}
-
+	    
 		return ID;
 	} // End of registerMember() method
-
+	
 //	
 //	//****************getUserById() method*****************
 //
@@ -180,7 +185,7 @@ public class MemberDAO {
 //		return u;
 //	} // End of getUserById() method
 //	
-	// ****************getMemberByName or login method*****************
+	//****************getMemberByName or login method*****************
 
 	public Member getMemberByName(String name) throws ClassNotFoundException, IOException, SQLException {
 		// Declare variables
@@ -188,19 +193,20 @@ public class MemberDAO {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		Member m = null;
-
+		
 		// Assign query string to variable
 		String qString = "select * from members where name = ?";
-
+		
 		// Create MySqlConnection class instance
 		DatabaseConnection databaseConnection = new DatabaseConnection();
 		// Begin try/catch block to query the database
-		try {
+		try
+		{
 			// Connect to database and assign query string to PreparedStatement object
 			conn = databaseConnection.getConnection();
 			System.out.println("Find member by name connection made.");
 			stmt = conn.prepareStatement(qString);
-
+			
 			// Set query parameters (?)
 			stmt.setString(1, name);
 			// Run query and assign to ResultSet
@@ -214,10 +220,14 @@ public class MemberDAO {
 				m.setPassword(rs.getString(4));
 				m.setFavoriteLanguage(rs.getString(5));
 			}
-		} catch (ClassNotFoundException | IOException | SQLException e) {
+		}
+		catch (ClassNotFoundException | IOException | SQLException e)
+		{
 			System.out.println("Error: " + e.getMessage());
 			System.out.println(e.getStackTrace());
-		} finally {
+		}
+		finally
+		{
 			if (rs != null) {
 				rs.close();
 			}
@@ -229,20 +239,21 @@ public class MemberDAO {
 			}
 		}
 		return m;
-	} // End of getMemberByName() method
-
+	}  // End of getMemberByName() method
+	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
-
+		
 		MemberDAO m_dao = new MemberDAO();
-//		m.setName("member1");
-//		m.setEmail("member1@email.com");
-//		m.setPassword("pass1");
-//		m.setFavoriteLanguage("Java");
-//		Integer i = m_dao.registerMember(m);
-		Member m = m_dao.getMemberByName("member1");
-		System.out.println(m.getMemberId());
+		Member m = new Member();
+		m.setName("member2");
+		m.setEmail("member2@email.com");
+		m.setPassword("pass2");
+		m.setFavoriteLanguage("Java");
+		m_dao.registerMember(m);
+//		Member m = m_dao.getMemberByName("member1");
+//		System.out.println(m.getMemberId());
 	}
-
+	
 //	//****************updateUser() method*****************
 //	
 //	public Boolean updateUser(User u) throws SQLException, ClassNotFoundException, IOException {
@@ -334,5 +345,5 @@ public class MemberDAO {
 //		}
 //		return false;
 //	} // End of removeUser() method
-
+	
 } // End of UserDAO class

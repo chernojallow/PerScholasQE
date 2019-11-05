@@ -40,6 +40,7 @@ public class AddressVerify {
 	public void perScholas() {
 	    driver.get("https://perscholas.org/");
 	    driver.manage().window().setSize(new Dimension(1280, 680));
+	    //driver.findElement(By.name("name")).sendKeys("hello");
 	    driver.findElement(By.cssSelector(".dropdown > #mapToggle")).click();
 	    {
 	      WebElement element = driver.findElement(By.cssSelector(".active > a"));
