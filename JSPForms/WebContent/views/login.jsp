@@ -13,8 +13,8 @@
 	<% } %>
 	
 	<form action="views/success.jsp" method="post">
-		<label>User Name:&nbsp;<input type="text" name="userName" /></label>
-		<label>Password:&nbsp;<input type="password" name="userPassword" /></label>
+		<p><label>User Name:&nbsp;<input type="text" name="userName" /></label> </p>
+		<p><label>Password:&nbsp;<input type="password" name="userPassword" /></label></p>
 		<input type="submit" name="login" value="Login" />
 	</form>
 </body>
