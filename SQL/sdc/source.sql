@@ -26,3 +26,16 @@ CREATE TABLE `events` (
 		FOREIGN KEY (`members_member_id`) REFERENCES `member` (`member_id`) 
 			ON UPDATE CASCADE ON DELETE CASCADE
 ) DEFAULT CHARSET=UTF8;
+
+DROP TABLE IF EXISTS `signups`;
+CREATE TABLE `signups` (
+	`signups_member_id` INT NOT NULL,
+    `signups_event_id` INT NOT NULL,
+    PRIMARY KEY (`signups_member_id`, `signups_event_id`),
+    CONSTRAINT `s_fk_eventId` FOREIGN KEY (`signups_event_id`)
+		REFERENCES `events` (`event_id`)
+			ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `s_fk_memberId` FOREIGN KEY (`signups_member_id`)
+		REFERENCES `members` (`member_id`)
+			ON UPDATE CASCADE ON DELETE CASCADE
+)  DEFAULT CHARSET=UTF8;

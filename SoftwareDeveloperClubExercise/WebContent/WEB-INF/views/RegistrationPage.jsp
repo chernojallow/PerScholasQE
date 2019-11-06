@@ -8,27 +8,14 @@
 </head>
 <body>
 	<h1>Registration Page</h1>
-	<a href="${pageContext.request.contextPath}/HomeServlet">Cancel</a>
 	<form action="${pageContext.request.contextPath}/HomeServlet/registerMember" method="post">
-		<div>
-			<label>Member Name:</label>
-			<input name="name" />
-		</div>
-		<div>
-			<label>Email:</label>
-			<input name="email" />
-		</div>
-		<div>
-			<label>Password:</label>
-			<input name="password" />
-		</div>
-		<div>
-			<label>Favorite Language:</label>
-			<input name="favoriteLanguage" />
-		</div>
-		<div>
-			<input type=submit value="Register" />
-		</div>
+			<p> <label>Member Name:&nbsp;<input name="name" required/> </label> </p>
+			<p> <label>Email:&nbsp;<input name="email" required/> </label> </p>
+			<p> <label>Password:&nbsp;<input name="password" type="password" required/> </label> </p>
+			<p> <label>Favorite Genre:&nbsp;<input name="fGenre" required/></label> </p>
+			<p> <input type=submit value="Register" /> <input type="reset"/> </p>
 	</form>
+	
+	<a href="${pageContext.request.contextPath}/HomeServlet">Return to login</a>
 </body>
 </html>
