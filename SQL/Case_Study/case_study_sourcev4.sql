@@ -1,0 +1,15 @@
+DROP DATABASE IF EXISTS `case_study`;
+CREATE DATABASE `case_study`; 
+USE `case_study`; 
+SET FOREIGN_KEY_CHECKS=0;
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+	`userID` INT NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(25) NOT NULL,
+	`password` VARCHAR(25) NOT NULL,
+	`role` TINYINT NOT NULL,
+	PRIMARY KEY (`userID`),
+	UNIQUE KEY `username` (`username`)
+) DEFAULT CHARSET=UTF8;
+
