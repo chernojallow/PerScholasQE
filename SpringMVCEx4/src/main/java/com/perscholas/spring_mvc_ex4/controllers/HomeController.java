@@ -29,6 +29,10 @@ public class HomeController {
 	@PostMapping("/RegInformation")
 	public String showRegInformation(@RequestParam String name, @RequestParam String email,
 			@RequestParam String password, @RequestParam String fGenre, Model model) {
+		System.out.println("Name:" + name);
+		System.out.println("Email:" + email);
+		System.out.println("Password:" + password);
+		System.out.println("Favorite Genre:" + fGenre);
 		model.addAttribute("name", name);
 		model.addAttribute("email", email);
 		model.addAttribute("password", password);

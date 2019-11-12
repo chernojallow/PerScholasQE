@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.perscholas.casestudy.rms_models.Table;
+import com.perscholas.casestudy.rms.models.Table;
 
 public class TableDAO {
 	// ****************testConnection() method*****************
@@ -57,8 +57,9 @@ public class TableDAO {
 				t = new Table();
 				// Assign columns/fields to related fields in the object
 				// Represent column numbers/positions
-				t.setTableID(rs.getInt(1));
-				t.setUserID(rs.getInt(2));
+				t.setTableId(rs.getInt(1));
+				t.setUserId(rs.getInt(2));
+				t.setOrderId(rs.getInt(3));
 				// Add the user to the list
 				tableList.add(t);
 				// Repeat until rs.next() returns false (i.e., end of ResultSet)
@@ -77,49 +78,42 @@ public class TableDAO {
 		return tableList;
 	} // End of getAll() method
 
-	// ****************register() method*****************
-	public Integer register(Table table) throws SQLException, ClassNotFoundException, IOException {
+	// ****************create() method*****************
+	public Boolean create(Integer userId, Integer tableId) throws SQLException, ClassNotFoundException, IOException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		ResultSet rs = null;
+		Integer createResult = null;
 
 		// Assign insert statement string to variable
-		String insertString = "INSERT INTO `table` (`userID`) VALUES (?);";
-
-		int ID = -1;
-		String[] COL = { "`tableID`" };
+		String insertString = "INSERT INTO `table` (`userId`, `tableId`) VALUES (?, ?);";
 
 		DBConnection dbConn = new DBConnection();
 
 		try {
 			conn = dbConn.getConnection();
-			stmt = conn.prepareStatement(insertString, COL);
+			stmt = conn.prepareStatement(insertString);
 
-			stmt.setInt(1, table.getUserID());
+			stmt.setInt(1, userId);
+			stmt.setInt(2, tableId);
 
-			stmt.executeUpdate();
-
-			rs = stmt.getGeneratedKeys();
-			if (rs != null && rs.next()) {
-				ID = rs.getInt(1);
-			}
+			createResult = stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Error: " + e.getMessage());
 		} finally {
-			if (rs != null)
-				rs.close();
 			if (stmt != null)
 				stmt.close();
 			if (conn != null)
 				conn.close();
 		}
 
-		return ID;
-	} // End of register() method
+		if (createResult > 0)
+			return true;
+		return false;
+	} // End of create() method
 
-	// ****************getByID() method*****************
-	public Table getByID(Integer tableID, Integer userID) throws ClassNotFoundException, IOException, SQLException {
+	// ****************getById() method*****************
+	public Table getById(Integer tableId, Integer userId) throws ClassNotFoundException, IOException, SQLException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -127,7 +121,7 @@ public class TableDAO {
 		Table t = null;
 
 		// Assign query string to variable
-		String qString = "SELECT * FROM `table` WHERE `tableID` = ? && `userID` = ?;";
+		String qString = "SELECT * FROM `table` WHERE `tableId` = ? && `userId` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -139,8 +133,8 @@ public class TableDAO {
 			stmt = conn.prepareStatement(qString);
 
 			// Set query parameters (?)
-			stmt.setInt(1, tableID); // ID if from String parameter passed to method
-			stmt.setInt(2, userID); // ID if from String parameter passed to method
+			stmt.setInt(1, tableId); // ID if from String parameter passed to method
+			stmt.setInt(2, userId); // ID if from String parameter passed to method
 
 			// Run query and assign to ResultSet
 			rs = stmt.executeQuery();
@@ -148,8 +142,9 @@ public class TableDAO {
 			// Retrieve ResultSet and assign to new object
 			if (rs.next()) {
 				t = new Table();
-				t.setTableID(rs.getInt(1));
-				t.setUserID(rs.getInt(2));
+				t.setTableId(rs.getInt(1));
+				t.setUserId(rs.getInt(2));
+				t.setOrderId(rs.getInt(3));
 			}
 		} catch (ClassNotFoundException | IOException | SQLException e) {
 			System.out.println("Error: " + e.getMessage());
@@ -163,17 +158,17 @@ public class TableDAO {
 				conn.close();
 		}
 		return t;
-	} // End of getByID() method
+	} // End of getById() method
 
 	// ****************update() method*****************
-	public Boolean update(Table t, Integer oUserID) throws SQLException, ClassNotFoundException, IOException {
+	public Boolean update(Table t, Integer newOrderId) throws SQLException, ClassNotFoundException, IOException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		Integer updateResult = null;
 
 		// Assign update string to variable
-		String updateString = "UPDATE `table` SET `userID` = ? WHERE `tableID` = ? && `userID` = ?;";
+		String updateString = "UPDATE `table` SET `orderId` = ? WHERE `tableId` = ? && `userId` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -184,9 +179,9 @@ public class TableDAO {
 			stmt = conn.prepareStatement(updateString);
 
 			// Set query parameters (?)
-			stmt.setInt(1, t.getUserID());
-			stmt.setInt(2, t.getTableID());
-			stmt.setInt(3, oUserID);
+			stmt.setInt(1, newOrderId);
+			stmt.setInt(2, t.getTableId());
+			stmt.setInt(3, t.getUserId());
 
 			// Run query and assign to ResultSet
 			updateResult = stmt.executeUpdate();
@@ -204,14 +199,14 @@ public class TableDAO {
 	} // End of update() method
 
 	// ****************remove() method (i.e., delete)*****************
-	public Boolean remove(Integer tableID) throws IOException, SQLException {
+	public Boolean remove(Integer tableId, Integer userId) throws IOException, SQLException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		Integer updateResult = null;
 
 		// Assign delete string to variable
-		String deleteString = "DELETE FROM `table` WHERE `tableID` = ?;";
+		String deleteString = "DELETE FROM `table` WHERE `tableId` = ? && `userId` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -222,7 +217,8 @@ public class TableDAO {
 			stmt = conn.prepareStatement(deleteString);
 
 			// Set query parameters (?)
-			stmt.setInt(1, tableID);
+			stmt.setInt(1, tableId);
+			stmt.setInt(2, userId);
 			// Run query and assign to ResultSet
 			updateResult = stmt.executeUpdate();
 		} catch (ClassNotFoundException | SQLException e) {
@@ -237,6 +233,46 @@ public class TableDAO {
 			return true;
 		return false;
 	}// End of remove() method
+		// ****************DAOTesting() method*****************
 
+	public static void DAOTesting() throws ClassNotFoundException, IOException, SQLException {
+		TableDAO t_dao = new TableDAO();
+		t_dao.testConnection();
+		System.out.println();
+
+		Table t = new Table();
+		if (t_dao.create(1, 4))
+			System.out.println("create() & getById()\n" + t_dao.getById(4, 1).toString());
+		else
+			System.out.println("create() & getById() failed");
+		System.out.println();
+
+		List<Table> tList = t_dao.getAll();
+		System.out.println("getAll()");
+		for (Table t1 : tList)
+			System.out.println(t1.toString());
+		System.out.println();
+
+		t = new Table();
+		t.setTableId(1);
+		t.setUserId(1);
+		t.setOrderId(1);
+
+		if (t_dao.update(t, t.getOrderId()))
+			System.out.println("update()\n" + t.toString());
+		else
+			System.out.println("update() failed");
+		System.out.println();
+
+		t = t_dao.getById(2, 1);
+		if (t_dao.remove(2, 1))
+			System.out.println("remove()\n" + t.toString());
+		else
+			System.out.println("remove() failed");
+	} // End of DAOTesting() method
+
+//	// ****************main() method testing*****************
+//	public static void main(String[] args) throws ClassNotFoundException, IOException, SQLException {
+//		DAOTesting();
+//	} // End of main() method
 }
-

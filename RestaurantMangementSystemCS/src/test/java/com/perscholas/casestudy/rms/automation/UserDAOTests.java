@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.perscholas.casestudy.rms.daos.UserDAO;
-import com.perscholas.casestudy.rms_models.User;
+import com.perscholas.casestudy.rms.models.User;
 
 
 
@@ -35,15 +35,15 @@ public class UserDAOTests {
 
 		try {
 			List<User> userList = u_dao.getAll();
-			assertThat(userList.get(0).getUserID().toString(), is("1"));
-			assertThat(userList.get(1).getUserID().toString(), is("2"));
-			assertThat(userList.get(2).getUserID().toString(), is("3"));
+			assertThat(userList.get(0).getUserId().toString(), is("1"));
+			assertThat(userList.get(1).getUserId().toString(), is("2"));
+			assertThat(userList.get(2).getUserId().toString(), is("3"));
 			assertThat(userList.get(0).getUsername().toString(), equalTo("xiaolin996"));
-			assertThat(userList.get(1).getUsername().toString(), equalTo("chenli996"));
-			assertThat(userList.get(2).getUsername().toString(), equalTo("zikacherno996"));
-			assertThat(userList.get(0).getPassword().toString(), equalTo("xiaolin996."));
-			assertThat(userList.get(1).getPassword().toString(), equalTo("chenli996."));
-			assertThat(userList.get(2).getPassword().toString(), equalTo("zikacherno996."));
+			assertThat(userList.get(1).getUsername().toString(), equalTo("chenli123"));
+			assertThat(userList.get(2).getUsername().toString(), equalTo("xiaolin123"));
+			assertThat(userList.get(0).getPassword().toString(), equalTo("xiaolin996"));
+			assertThat(userList.get(1).getPassword().toString(), equalTo("chenli123"));
+			assertThat(userList.get(2).getPassword().toString(), equalTo("xiaolin123"));
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -54,13 +54,14 @@ public class UserDAOTests {
 	public void UserRegisterTest() {
 		assumeThat(u_dao.testConnection(), equalTo(true));
 		User u = new User();
-		u.setUsername("goutham996");
-		u.setPassword("goutham996.");
+		u.setUsername("goutham123");
+		u.setPassword("buvan123");
+		u.setAddressId(2);
 		u.setRole(1);
 
 		try {
-			u.setUserID(u_dao.register(u));
-			assertThat(4, equalTo(u.getUserID()));
+			u.setUserId(u_dao.create(u));
+			assertThat(4, equalTo(u.getUserId()));
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
 		}
@@ -71,11 +72,11 @@ public class UserDAOTests {
 		assumeThat(u_dao.testConnection(), equalTo(true));
 
 		try {
-			User u = u_dao.getByID(1);
-			assertThat(u.getUserID(), is(1));
-			assertThat(u.getUsername(), equalTo("xiaolin996"));
-			assertThat(u.getPassword(), equalTo("xiaolin996."));
-			assertThat(u.getRole(), is(1));
+			User u = u_dao.getById(2);
+			assertThat(u.getUserId(), is(2));
+			assertThat(u.getUsername(), equalTo("chenli123"));
+			assertThat(u.getPassword(), equalTo("chenli123"));
+			assertThat(u.getRole(), is(2));
 		} catch (ClassNotFoundException | IOException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -86,11 +87,11 @@ public class UserDAOTests {
 		assumeThat(u_dao.testConnection(), equalTo(true));
 
 		try {
-			User u = u_dao.getByName("chenli996");
-			assertThat(u.getUserID(), is(2));
-			assertThat(u.getRole(), is(1));
-			assertThat(u.getUsername(), equalTo("chenli996"));
-			assertThat(u.getPassword(), equalTo("chenli996."));
+			User u = u_dao.getByName("chenli123");
+			assertThat(u.getUserId(), is(2));
+			assertThat(u.getRole(), is(2));
+			assertThat(u.getUsername(), equalTo("chenli123"));
+			assertThat(u.getPassword(), equalTo("chenli123"));
 		} catch (ClassNotFoundException | IOException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -99,15 +100,15 @@ public class UserDAOTests {
 	@Test
 	public void UserUpdateTest() {
 		assumeThat(u_dao.testConnection(), equalTo(true));
-		User u = new User(3, "ivellromas996", "ivellromas996.", 2);
+		User u = new User(3, "ivellromas996", "ivellromas996.", 2, 1);
 
 		try {
 			u_dao.update(u);
-			u = u_dao.getByID(u.getUserID());
-			assertThat(u.getUserID(), is(3));
+			u = u_dao.getById(u.getUserId());
+			assertThat(u.getUserId(), is(3));
 			assertThat(u.getUsername(), equalTo("ivellromas996"));
 			assertThat(u.getPassword(), equalTo("ivellromas996."));
-			assertThat(u.getRole(), is(2));
+			assertThat(u.getRole(), is(1));
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
 		}

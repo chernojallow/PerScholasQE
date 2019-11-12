@@ -16,6 +16,6 @@
 		<p> <input type=submit value="Register" /> <input type="reset"/> </p>
 	</form>
 	
-	<a href="${pageContext.request.contextPath}/HomeServlet">Return to login</a>
+	<a href="${pageContext.request.contextPath}/">Return to login</a>
 </body>
 </html>

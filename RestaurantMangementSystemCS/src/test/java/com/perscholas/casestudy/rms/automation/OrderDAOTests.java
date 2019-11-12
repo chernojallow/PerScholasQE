@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.perscholas.casestudy.rms.daos.OrderDAO;
-import com.perscholas.casestudy.rms_models.Order;
+import com.perscholas.casestudy.rms.models.Order;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OrderDAOTests {
@@ -35,13 +35,10 @@ public class OrderDAOTests {
 		try {
 			List<Order> orderList = o_dao.getAll();
 
-			assertThat(orderList.get(0).getOrderID().toString(), is("1"));
-			assertThat(orderList.get(1).getOrderID().toString(), is("2"));
-			assertThat(orderList.get(2).getOrderID().toString(), is("3"));
-			assertThat(orderList.get(3).getUserID().toString(), equalTo("2"));
-			assertThat(orderList.get(6).getTableID().toString(), equalTo("7"));
-			assertThat(orderList.get(7).getTableID().toString(), equalTo("8"));
-			assertThat(orderList.get(8).getTableID().toString(), equalTo("9"));
+			assertThat(orderList.get(0).getOrderId().toString(), is("1"));
+			assertThat(orderList.get(1).getOrderId().toString(), is("2"));
+			assertThat(orderList.get(2).getOrderId().toString(), is("3"));
+			assertThat(orderList.get(3).getUserId().toString(), equalTo("2"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -51,13 +48,12 @@ public class OrderDAOTests {
 	public void OrderRegisterTest() {
 		assumeThat(o_dao.testConnection(), equalTo(true));
 		Order o = new Order();
-		o.setUserID(2);
-		o.setTableID(5);
+		o.setUserId(2);
 		o.setTime(new Timestamp(System.currentTimeMillis()));
 
 		try {
-			o.setOrderID(o_dao.register(o));
-			assertThat(10, equalTo(o.getOrderID()));
+			o.setOrderId(o_dao.create(o));
+			assertThat(10, equalTo(o.getOrderId()));
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
 		}
@@ -68,10 +64,9 @@ public class OrderDAOTests {
 		assumeThat(o_dao.testConnection(), equalTo(true));
 
 		try {
-			Order o = o_dao.getByID(6);
-			assertThat(o.getOrderID(), is(6));
-			assertThat(o.getUserID(), is(2));
-			assertThat(o.getTableID(), is(6));
+			Order o = o_dao.getById(6);
+			assertThat(o.getOrderId(), is(6));
+			assertThat(o.getUserId(), is(2));
 		} catch (ClassNotFoundException | IOException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -80,14 +75,12 @@ public class OrderDAOTests {
 	@Test
 	public void OrderUpdateTest() {
 		assumeThat(o_dao.testConnection(), equalTo(true));
-		Timestamp ts = new Timestamp(System.currentTimeMillis());
-		Order o = new Order(9, 3, 9, ts);
+		Order o = new Order(9, 3, new Timestamp(System.currentTimeMillis()));
 
 		try {
 			o_dao.update(o);
-			assertThat(o.getOrderID(), is(9));
-			assertThat(o.getUserID(), is(3));
-			assertThat(o.getTableID(), is(9));
+			assertThat(o.getOrderId(), is(9));
+			assertThat(o.getUserId(), is(3));
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
 		}

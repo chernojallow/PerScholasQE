@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.perscholas.casestudy.rms.daos.OrderItemsDAO;
-import com.perscholas.casestudy.rms_models.OrderItems;
+import com.perscholas.casestudy.rms.models.OrderItems;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OrderItemsDAOTests {
@@ -34,13 +34,10 @@ public class OrderItemsDAOTests {
 		try {
 			List<OrderItems> orderItemsList = oi_dao.getAll();
 
-			assertThat(orderItemsList.get(1).getOrderID().toString(), is("1"));
-			assertThat(orderItemsList.get(3).getCategoryID().toString(), is("1"));
-			assertThat(orderItemsList.get(4).getCategoryID().toString(), is("2"));
-			assertThat(orderItemsList.get(5).getCategoryID().toString(), is("3"));
-			assertThat(orderItemsList.get(6).getQuantity().toString(), equalTo("7"));
-			assertThat(orderItemsList.get(7).getQuantity().toString(), equalTo("8"));
-			assertThat(orderItemsList.get(8).getQuantity().toString(), equalTo("9"));
+			assertThat(orderItemsList.get(1).getOrderId().toString(), is("2"));
+			assertThat(orderItemsList.get(6).getQuantity().toString(), equalTo("1"));
+			assertThat(orderItemsList.get(7).getQuantity().toString(), equalTo("2"));
+			assertThat(orderItemsList.get(8).getQuantity().toString(), equalTo("3"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -50,13 +47,14 @@ public class OrderItemsDAOTests {
 	public void OrderItemsRegisterTest() {
 		assumeThat(oi_dao.testConnection(), equalTo(true));
 		OrderItems oi = new OrderItems();
-		oi.setOrderID(9);
-		oi.setCategoryID(3);
-		oi.setQuantity(10);
+		oi.setOrderId(9);
+		oi.setItemId(7);
+		oi.setQuantity(4);
 
 		try {
-			oi.setOrderID(oi_dao.register(oi));
-			assertThat(10, equalTo(oi.getQuantity()));
+			if (oi_dao.create(oi))
+				oi_dao.getById(oi.getOrderId(), oi.getItemId());
+			assertThat(4, equalTo(oi.getQuantity()));
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
 		}
@@ -67,10 +65,9 @@ public class OrderItemsDAOTests {
 		assumeThat(oi_dao.testConnection(), equalTo(true));
 
 		try {
-			OrderItems oi = oi_dao.getByID(3, 2);
-			assertThat(oi.getOrderID(), is(3));
-			assertThat(oi.getCategoryID(), is(2));
-			assertThat(oi.getQuantity(), is(8));
+			OrderItems oi = oi_dao.getById(3, 3);
+			assertThat(oi.getOrderId(), is(3));
+			assertThat(oi.getQuantity(), is(3));
 		} catch (ClassNotFoundException | IOException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -83,8 +80,8 @@ public class OrderItemsDAOTests {
 
 		try {
 			oi_dao.update(oi, 2);
-			assertThat(oi.getOrderID(), is(2));
-			assertThat(oi.getCategoryID(), is(2));
+			assertThat(oi.getOrderId(), is(2));
+			assertThat(oi.getItemId(), is(2));
 			assertThat(oi.getQuantity(), is(11));
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
@@ -96,7 +93,7 @@ public class OrderItemsDAOTests {
 		assumeThat(oi_dao.testConnection(), equalTo(true));
 
 		try {
-			Boolean result = oi_dao.remove(1, 3);
+			Boolean result = oi_dao.remove(7, 7);
 			assertThat(result, is(true));
 		} catch (IOException | SQLException e) {
 			e.printStackTrace();
