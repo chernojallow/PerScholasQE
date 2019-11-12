@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.perscholas.casestudy.rms.daos.CategoryDAO;
-import com.perscholas.casestudy.rms_models.Category;
+import com.perscholas.casestudy.rms.models.Category;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CategoryDAOTests {
@@ -34,12 +34,12 @@ public class CategoryDAOTests {
 		try {
 			List<Category> categoryList = c_dao.getAll();
 
-			assertThat((categoryList.get(0)).getCategoryID().toString(), is("1"));
-			assertThat(categoryList.get(1).getCategoryID().toString(), is("2"));
-			assertThat(categoryList.get(2).getCategoryID().toString(), is("3"));
-			assertThat(categoryList.get(0).getCategoryName().toString(), equalTo("hello"));
-			assertThat(categoryList.get(1).getCategoryName().toString(), equalTo("hey"));
-			assertThat(categoryList.get(2).getCategoryName().toString(), equalTo("ayyy"));
+			assertThat((categoryList.get(0)).getCategoryId().toString(), is("1"));
+			assertThat(categoryList.get(1).getCategoryId().toString(), is("2"));
+			assertThat(categoryList.get(2).getCategoryId().toString(), is("3"));
+			assertThat(categoryList.get(0).getCategoryName().toString(), equalTo("category1"));
+			assertThat(categoryList.get(1).getCategoryName().toString(), equalTo("category2"));
+			assertThat(categoryList.get(2).getCategoryName().toString(), equalTo("category3"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -49,11 +49,11 @@ public class CategoryDAOTests {
 	public void CategoryRegisterTest() {
 		assumeThat(c_dao.testConnection(), equalTo(true));
 		Category c = new Category();
-		c.setCategoryName("ayy");
+		c.setCategoryName("category4");
 
 		try {
-			c.setCategoryID(c_dao.register(c));
-			assertThat(4, equalTo(c.getCategoryID()));
+			c.setCategoryId(c_dao.create(c));
+			assertThat(4, equalTo(c.getCategoryId()));
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
 		}
@@ -64,22 +64,9 @@ public class CategoryDAOTests {
 		assumeThat(c_dao.testConnection(), equalTo(true));
 
 		try {
-			Category c = c_dao.getByID(1);
-			assertThat(c.getCategoryID(), is(1));
-			assertThat(c.getCategoryName(), is("hello"));
-		} catch (ClassNotFoundException | IOException | SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Test
-	public void CategoryGetByNameTest() {
-		assumeThat(c_dao.testConnection(), equalTo(true));
-
-		try {
-			Category c = c_dao.getByName("hey");
-			assertThat(c.getCategoryID(), equalTo(2));
-			assertThat(c.getCategoryName(), equalTo("hey"));
+			Category c = c_dao.getById(1);
+			assertThat(c.getCategoryId(), is(1));
+			assertThat(c.getCategoryName(), is("category1"));
 		} catch (ClassNotFoundException | IOException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -88,12 +75,12 @@ public class CategoryDAOTests {
 	@Test
 	public void CategoryUpdateTest() {
 		assumeThat(c_dao.testConnection(), equalTo(true));
-		Category c = new Category(3, "ayyy");
+		Category c = new Category(4, "categoryET");
 
 		try {
 			c_dao.update(c);
-			assertThat(c.getCategoryID(), equalTo(3));
-			assertThat(c.getCategoryName(), equalTo("ayyy"));
+			assertThat(c.getCategoryId(), equalTo(4));
+			assertThat(c.getCategoryName(), equalTo("categoryET"));
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			e.printStackTrace();
 		}

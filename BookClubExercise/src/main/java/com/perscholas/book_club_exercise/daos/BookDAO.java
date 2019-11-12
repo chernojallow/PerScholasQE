@@ -362,7 +362,7 @@ public class BookDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
+	} // End of DAOTesting() method
 
 //	// ****************main() method testing*****************
 //	public static void main(String[] args) {

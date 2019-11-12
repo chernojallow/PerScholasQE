@@ -5,13 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.perscholas.casestudy.rms.models.Category;
+import com.perscholas.casestudy.rms.models.Address;
 
-public class CategoryDAO {
+public class AddressDAO {
 	// ****************testConnection() method*****************
 	public Boolean testConnection() {
 		DBConnection dbConn = new DBConnection();
@@ -25,70 +22,18 @@ public class CategoryDAO {
 		return true;
 	}
 
-	// ****************getAll() method*****************
-	public List<Category> getAll() throws SQLException {
-		// Declare variables
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		Category c = null;
-		List<Category> categoryList = null;
-
-		// Assign query string to a string
-		String qString = "SELECT * FROM category;";
-		// Create DBConnection class instance
-		DBConnection dbConn = new DBConnection();
-
-		// Begin try/catch block to query the database
-		try {
-			// Connect to database
-			conn = dbConn.getConnection();
-			// If the connection fails the application won't make it to this point
-			// Create Statement instance/object
-			stmt = conn.createStatement();
-
-			// Run query and assign to the ResultSet instance
-			rs = stmt.executeQuery(qString);
-			// Create list to hold objects
-			categoryList = new ArrayList<Category>();
-			// Read the ResultSet instance
-			while (rs.next()) {
-				// Each iteration creates a new object
-				c = new Category();
-				// Assign columns/fields to related fields in the object
-				// Represent column numbers/positions
-				c.setCategoryId(rs.getInt(1));
-				c.setCategoryName(rs.getString(2));
-				// Add the user to the list
-				categoryList.add(c);
-				// Repeat until rs.next() returns false (i.e., end of ResultSet)
-			}
-		} catch (ClassNotFoundException | IOException | SQLException e) {
-			System.out.println("Error: " + e.getMessage());
-			e.getStackTrace();
-		} finally {
-			if (rs != null)
-				rs.close();
-			if (stmt != null)
-				stmt.close();
-			if (conn != null)
-				conn.close();
-		}
-		return categoryList;
-	} // End of getAll() method
-
 	// ****************create() method*****************
-	public Integer create(Category category) throws SQLException, ClassNotFoundException, IOException {
+	public Integer create(Address address) throws SQLException, ClassNotFoundException, IOException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 
 		// Assign insert statement string to variable
-		String insertString = "INSERT INTO category (`categoryName`) VALUES (?);";
+		String insertString = "INSERT INTO `address` (`address1`, `address2`, `city`, `state`, `postalCode`) VALUES (?, ?, ?, ?, ?);";
 
 		int ID = -1;
-		String[] COL = { "`categoryId`" };
+		String[] COL = { "`addressId`" };
 
 		DBConnection dbConn = new DBConnection();
 
@@ -96,7 +41,11 @@ public class CategoryDAO {
 			conn = dbConn.getConnection();
 			stmt = conn.prepareStatement(insertString, COL);
 
-			stmt.setString(1, category.getCategoryName());
+			stmt.setString(1, address.getAddress1());
+			stmt.setString(2, address.getAddress2());
+			stmt.setString(3, address.getCity());
+			stmt.setString(4, address.getState());
+			stmt.setInt(5, address.getPostalCode());
 
 			stmt.executeUpdate();
 
@@ -119,15 +68,15 @@ public class CategoryDAO {
 	} // End of create() method
 
 	// ****************getById() method*****************
-	public Category getById(Integer categoryId) throws ClassNotFoundException, IOException, SQLException {
+	public Address getById(Integer addressId) throws ClassNotFoundException, IOException, SQLException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		Category c = null;
+		Address a = null;
 
 		// Assign query string to variable
-		String qString = "SELECT * FROM category WHERE `categoryId` = ?;";
+		String qString = "SELECT * FROM `address` WHERE `addressId` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -139,16 +88,20 @@ public class CategoryDAO {
 			stmt = conn.prepareStatement(qString);
 
 			// Set query parameters (?)
-			stmt.setInt(1, categoryId); // ID if from String parameter passed to method
+			stmt.setInt(1, addressId); // ID if from String parameter passed to method
 
 			// Run query and assign to ResultSet
 			rs = stmt.executeQuery();
 
 			// Retrieve ResultSet and assign to new object
 			if (rs.next()) {
-				c = new Category();
-				c.setCategoryId(rs.getInt(1));
-				c.setCategoryName(rs.getString(2));
+				a = new Address();
+				a.setAddressId(rs.getInt(1));
+				a.setAddress1(rs.getString(2));
+				a.setAddress2(rs.getString(3));
+				a.setCity(rs.getString(4));
+				a.setState(rs.getString(5));
+				a.setPostalCode(rs.getInt(6));
 			}
 		} catch (ClassNotFoundException | IOException | SQLException e) {
 			System.out.println("Error: " + e.getMessage());
@@ -161,18 +114,18 @@ public class CategoryDAO {
 			if (conn != null)
 				conn.close();
 		}
-		return c;
+		return a;
 	} // End of getById() method
 
 	// ****************update() method*****************
-	public Boolean update(Category c) throws SQLException, ClassNotFoundException, IOException {
+	public Boolean update(Address a) throws SQLException, ClassNotFoundException, IOException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		Integer updateResult = null;
 
 		// Assign update string to variable
-		String updateString = "UPDATE category SET `categoryName` = ? WHERE `categoryId` = ?;";
+		String updateString = "UPDATE `address` SET `address1` = ?, `address2` = ?, `city` = ?, `state` = ?, `postalCode` = ? WHERE `addressId` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -183,8 +136,12 @@ public class CategoryDAO {
 			stmt = conn.prepareStatement(updateString);
 
 			// Set query parameters (?)
-			stmt.setString(1, c.getCategoryName());
-			stmt.setInt(2, c.getCategoryId());
+			stmt.setString(1, a.getAddress1());
+			stmt.setString(2, a.getAddress2());
+			stmt.setString(3, a.getCity());
+			stmt.setString(4, a.getState());
+			stmt.setInt(5, a.getPostalCode());
+			stmt.setInt(6, a.getAddressId());
 			// Run query and assign to ResultSet
 			updateResult = stmt.executeUpdate();
 		} catch (ClassNotFoundException | SQLException e) {
@@ -201,14 +158,14 @@ public class CategoryDAO {
 	} // End of update() method
 
 	// ****************remove() method (i.e., delete)*****************
-	public Boolean remove(Integer categoryId) throws IOException, SQLException {
+	public Boolean remove(Integer addressId) throws IOException, SQLException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		Integer updateResult = null;
 
 		// Assign delete string to variable
-		String deleteString = "DELETE FROM category WHERE `categoryId` = ?;";
+		String deleteString = "DELETE FROM `address` WHERE `addressId` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -219,7 +176,7 @@ public class CategoryDAO {
 			stmt = conn.prepareStatement(deleteString);
 
 			// Set query parameters (?)
-			stmt.setInt(1, categoryId);
+			stmt.setInt(1, addressId);
 			// Run query and assign to ResultSet
 			updateResult = stmt.executeUpdate();
 		} catch (ClassNotFoundException | SQLException e) {
@@ -237,36 +194,34 @@ public class CategoryDAO {
 
 	// ****************DAOTesting() method*****************
 	public static void DAOTesting() throws ClassNotFoundException, IOException, SQLException {
-		CategoryDAO c_dao = new CategoryDAO();
-		c_dao.testConnection();
+		AddressDAO a_dao = new AddressDAO();
+		a_dao.testConnection();
 		System.out.println();
 
-		Category c = new Category();
-		c.setCategoryName("categoryE");
-		c.setCategoryId(c_dao.create(c));
-		System.out.println("create()\n" + c.toString());
+		Address a = new Address();
+		a.setAddress1("address1E");
+		a.setAddress2("address2E");
+		a.setCity("city1E");
+		a.setState("SE");
+		a.setPostalCode(12345);
+		a.setAddressId(a_dao.create(a));
+		System.out.println("create()\n" + a.toString());
 		System.out.println();
 
-		List<Category> cList = c_dao.getAll();
-		System.out.println("getAll()");
-		for (Category c1 : cList)
-			System.out.println(c1.toString());
-		System.out.println();
-
-		c = new Category(1, "categoryNameEU");
-		if (c_dao.update(c))
-			System.out.println("update()\n" + c.toString());
+		a = new Address(1, "address1EU", "", "city1EU", "EU", 00000);
+		if (a_dao.update(a))
+			System.out.println("update()\n" + a.toString());
 		else
 			System.out.println("update() failed");
 		System.out.println();
 
-		c = c_dao.getById(1);
-		System.out.println("getById()\n" + c.toString());
+		a = a_dao.getById(1);
+		System.out.println("getById()\n" + a.toString());
 		System.out.println();
 
-		c = c_dao.getById(2);
-		if (c_dao.remove(2))
-			System.out.println("remove()\n" + c.toString());
+		a = a_dao.getById(2);
+		if (a_dao.remove(2))
+			System.out.println("remove()\n" + a.toString());
 		else
 			System.out.println("remove() failed");
 	} // End of DAOTesting() method

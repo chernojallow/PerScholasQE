@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.perscholas.casestudy.rms_models.OrderItems;
+import com.perscholas.casestudy.rms.models.OrderItems;
 
 public class OrderItemsDAO {
 	// ****************testConnection() method*****************
@@ -57,9 +57,10 @@ public class OrderItemsDAO {
 				oi = new OrderItems();
 				// Assign columns/fields to related fields in the object
 				// Represent column numbers/positions
-				oi.setOrderID(rs.getInt(1));
-				oi.setCategoryID(rs.getInt(2));
+				oi.setOrderId(rs.getInt(1));
+				oi.setItemId(rs.getInt(2));
 				oi.setQuantity(rs.getInt(3));
+				oi.setSubtotal(rs.getDouble(4));
 				// Add the user to the list
 				orderItemsList.add(oi);
 				// Repeat until rs.next() returns false (i.e., end of ResultSet)
@@ -78,43 +79,43 @@ public class OrderItemsDAO {
 		return orderItemsList;
 	} // End of getAll() method
 
-	// ****************register() method*****************
-	public Integer register(OrderItems orderItem) throws SQLException, ClassNotFoundException, IOException {
+	// ****************create() method*****************
+	public Boolean create(OrderItems orderItem) throws SQLException, ClassNotFoundException, IOException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		ResultSet rs = null;
+		Integer createResult = null;
 
 		// Assign insert statement string to variable
-		String insertString = "INSERT INTO `order_items` (`orderID`, `categoryID`, `quantity`) VALUES (?, ?, ?);";
-
+		String insertString = "INSERT INTO `order_items` (`orderId`, `itemId`, `quantity`, `subtotal`) VALUES (?, ?, ?, "
+				+ "ROUND((SELECT `price` FROM `item` WHERE `itemId` = " + orderItem.getItemId() + ") * "
+				+ orderItem.getQuantity() + ", 2));";
 		DBConnection dbConn = new DBConnection();
 
 		try {
 			conn = dbConn.getConnection();
 			stmt = conn.prepareStatement(insertString);
 
-			stmt.setInt(1, orderItem.getOrderID());
-			stmt.setInt(2, orderItem.getCategoryID());
+			stmt.setInt(1, orderItem.getOrderId());
+			stmt.setInt(2, orderItem.getItemId());
 			stmt.setInt(3, orderItem.getQuantity());
 
-			stmt.executeUpdate();
+			createResult = stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Error: " + e.getMessage());
 		} finally {
-			if (rs != null)
-				rs.close();
 			if (stmt != null)
 				stmt.close();
 			if (conn != null)
 				conn.close();
 		}
+		if (createResult > 0)
+			return true;
+		return false;
+	} // End of create() method
 
-		return orderItem.getOrderID();
-	} // End of register() method
-
-	// ****************getByID() method*****************
-	public OrderItems getByID(Integer orderID, Integer categoryID)
+	// ****************getById() method*****************
+	public OrderItems getById(Integer orderId, Integer itemId)
 			throws ClassNotFoundException, IOException, SQLException {
 		// Declare variables
 		Connection conn = null;
@@ -123,7 +124,7 @@ public class OrderItemsDAO {
 		OrderItems oi = null;
 
 		// Assign query string to variable
-		String qString = "SELECT * FROM `order_items` WHERE `orderID` = ? && `categoryID` = ?;";
+		String qString = "SELECT * FROM `order_items` WHERE `orderId` = ? && `itemId` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -135,8 +136,8 @@ public class OrderItemsDAO {
 			stmt = conn.prepareStatement(qString);
 
 			// Set query parameters (?)
-			stmt.setInt(1, orderID); // ID if from String parameter passed to method
-			stmt.setInt(2, categoryID); // ID if from String parameter passed to method
+			stmt.setInt(1, orderId); // ID if from String parameter passed to method
+			stmt.setInt(2, itemId); // ID if from String parameter passed to method
 
 			// Run query and assign to ResultSet
 			rs = stmt.executeQuery();
@@ -144,9 +145,10 @@ public class OrderItemsDAO {
 			// Retrieve ResultSet and assign to new object
 			if (rs.next()) {
 				oi = new OrderItems();
-				oi.setOrderID(rs.getInt(1));
-				oi.setCategoryID(rs.getInt(2));
+				oi.setOrderId(rs.getInt(1));
+				oi.setItemId(rs.getInt(2));
 				oi.setQuantity(rs.getInt(3));
+				oi.setSubtotal(rs.getDouble(4));
 			}
 		} catch (ClassNotFoundException | IOException | SQLException e) {
 			System.out.println("Error: " + e.getMessage());
@@ -160,17 +162,18 @@ public class OrderItemsDAO {
 				conn.close();
 		}
 		return oi;
-	} // End of getByID() method
+	} // End of getById() method
 
 	// ****************update() method*****************
-	public Boolean update(OrderItems oi, Integer oCategoryID) throws SQLException, ClassNotFoundException, IOException {
+	public Boolean update(OrderItems oi, Integer newItemId) throws SQLException, ClassNotFoundException, IOException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		Integer updateResult = null;
 
 		// Assign update string to variable
-		String updateString = "UPDATE `order_items` SET `categoryID` = ?, `quantity` = ? WHERE `orderID` = ? && `categoryID` = ?;";
+		String updateString = "UPDATE `order_items` SET `itemId` = ?, `quantity` = ?, `subtotal` = (ROUND((SELECT `price` FROM `item` WHERE `itemId` = "
+				+ oi.getItemId() + ") * " + oi.getQuantity() + ", 2)) WHERE `orderId` = ? && `itemId` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -181,10 +184,10 @@ public class OrderItemsDAO {
 			stmt = conn.prepareStatement(updateString);
 
 			// Set query parameters (?)
-			stmt.setInt(1, oi.getCategoryID());
+			stmt.setInt(1, newItemId);
 			stmt.setInt(2, oi.getQuantity());
-			stmt.setInt(3, oi.getOrderID());
-			stmt.setInt(4, oCategoryID);
+			stmt.setInt(3, oi.getOrderId());
+			stmt.setInt(4, oi.getItemId());
 
 			// Run query and assign to ResultSet
 			updateResult = stmt.executeUpdate();
@@ -202,14 +205,14 @@ public class OrderItemsDAO {
 	} // End of update() method
 
 	// ****************remove() method (i.e., delete)*****************
-	public Boolean remove(Integer orderID, Integer categoryID) throws IOException, SQLException {
+	public Boolean remove(Integer orderId, Integer itemId) throws IOException, SQLException {
 		// Declare variables
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		Integer updateResult = null;
 
 		// Assign delete string to variable
-		String deleteString = "DELETE FROM `order_items` WHERE `orderID` = ? && `categoryID` = ?;";
+		String deleteString = "DELETE FROM `order_items` WHERE `orderId` = ? && `itemId` = ?;";
 
 		// Create DBConnection class instance
 		DBConnection dbConn = new DBConnection();
@@ -220,8 +223,8 @@ public class OrderItemsDAO {
 			stmt = conn.prepareStatement(deleteString);
 
 			// Set query parameters (?)
-			stmt.setInt(1, orderID);
-			stmt.setInt(2, categoryID);
+			stmt.setInt(1, orderId);
+			stmt.setInt(2, itemId);
 
 			// Run query and assign to ResultSet
 			updateResult = stmt.executeUpdate();
@@ -238,4 +241,47 @@ public class OrderItemsDAO {
 		return false;
 	}// End of remove() method
 
+	public static void DAOTesting() throws ClassNotFoundException, IOException, SQLException {
+		OrderItemsDAO oi_dao = new OrderItemsDAO();
+		oi_dao.testConnection();
+		System.out.println();
+
+		OrderItems oi = new OrderItems();
+		oi.setOrderId(1);
+		oi.setItemId(4);
+		oi.setQuantity(1);
+
+		if (oi_dao.create(oi))
+			System.out.println("create() & getById()\n" + oi_dao.getById(oi.getOrderId(), oi.getItemId()).toString());
+		else
+			System.out.println("create() & getById() failed");
+		System.out.println();
+
+		List<OrderItems> oiList = oi_dao.getAll();
+		System.out.println("getAll()");
+		for (OrderItems oi1 : oiList)
+			System.out.println(oi1.toString());
+		System.out.println();
+
+		oi = new OrderItems();
+		oi.setOrderId(1);
+		oi.setItemId(1);
+		oi.setQuantity(2);
+		if (oi_dao.update(oi, 5))
+			System.out.println("update()\n" + oi_dao.getById(1, 4));
+		else
+			System.out.println("update() failed");
+		System.out.println();
+
+		oi = oi_dao.getById(2, 6);
+		if (oi_dao.remove(2, 6))
+			System.out.println("remove()\n" + oi.toString());
+		else
+			System.out.println("remove() failed");
+	} // End of DAOTesting() method
+
+//	// ****************main() method testing*****************
+//	public static void main(String[] args) throws ClassNotFoundException, IOException, SQLException {
+//		DAOTesting();
+//	} // End of main() method
 }
