@@ -15,7 +15,7 @@ import com.perscholas.casestudy.rms.models.Address;
 import com.perscholas.casestudy.rms.models.User;
 
 @Controller
-public class HomeController {
+public class UserController {
 
 	@GetMapping("/")
 	public String showDefaultPage() {
