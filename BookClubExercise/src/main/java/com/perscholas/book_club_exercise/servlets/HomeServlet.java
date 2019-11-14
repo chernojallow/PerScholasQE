@@ -29,7 +29,6 @@ public class HomeServlet extends HttpServlet {
 		String action = null;
 		String servletPath = request.getServletPath();
 		String pathInfo = request.getPathInfo();
-
 		if (pathInfo == null || pathInfo.equals("/")) {
 			action = servletPath;
 		} else {
