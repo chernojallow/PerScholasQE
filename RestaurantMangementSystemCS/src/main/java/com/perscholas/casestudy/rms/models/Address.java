@@ -1,21 +1,35 @@
 package com.perscholas.casestudy.rms.models;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 public class Address {
+	@Id
+	@GeneratedValue
 	private Integer addressId;
+	
+	@Size(min = 1, max=255, message = "Address1 must be between 1 and 255 characters long.")
+	@NotBlank(message = "Address1 is required.")
 	private String address1;
+	
+	@Size(min = 1, max=255, message = "Address2 must be between 1 and 255 characters long.")
 	private String address2;
+	
+	@Size(min = 1, max=50, message = "City must be between 1 and 50 characters long.")
+	@NotBlank(message = "City is required.")
 	private String city;
+	
+	@Size(min = 1, max=50, message = "State must be between 1 and 50 characters long.")
+	@NotBlank(message = "State is required.")
 	private String state;
+	
+	@Size(min=5, max=5, message = "Zip code must be 5 characters long.")
+	@NotBlank(message = "Zip code is required.")
 	private Integer postalCode;
 
-	public Address() {
-		this.addressId = null;
-		this.address1 = null;
-		this.address2 = null;
-		this.city = null;
-		this.state = null;
-		this.postalCode = null;
-	}
+	public Address() {}
 
 	public Address(Integer addressId, String address1, String address2, String city, String state, Integer postalCode) {
 		this.addressId = addressId;

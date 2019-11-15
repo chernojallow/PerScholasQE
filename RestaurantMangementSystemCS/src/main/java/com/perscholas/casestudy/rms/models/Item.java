@@ -1,17 +1,27 @@
 package com.perscholas.casestudy.rms.models;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 public class Item {
+	@Id
+	@GeneratedValue
 	private Integer itemId;
+	
+	@Size(min = 1, max=50, message="Item name must be between 1 and 50 characters long.")
+	@NotBlank(message="Item name is required.")
 	private String itemName;
+	
+	@Size(min = 1, max=50, message="Item name must be between 1 and 50 characters long.")
+	@NotBlank(message="Item name is required.")
 	private Integer categoryId;
+	
+	@NotBlank(message="Item name is required.")
 	private Double price;
 
-	public Item() {
-		this.itemId = null;
-		this.itemName = null;
-		this.categoryId = null;
-		this.price = null;
-	}
+	public Item() {}
 
 	public Item(Integer itemId, String itemName, Integer categoryId, Double price) {
 		super();

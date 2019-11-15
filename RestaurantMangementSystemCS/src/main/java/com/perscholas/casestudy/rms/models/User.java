@@ -1,10 +1,27 @@
 package com.perscholas.casestudy.rms.models;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 public class User {
+	@Id
+	@GeneratedValue
 	private Integer userId;
+	
+	@Size(min = 5, max = 25, message = "Username must be between 5 and 25 characters long.")
+	@NotBlank(message = "Username is required.")
 	private String username;
+	
+	@Size(min = 5, max = 25, message = "Password must be between 5 and 25 characters long.")
+	@NotBlank(message = "Password is required.")
 	private String password;
+	
+	@NotBlank(message = "Address Id is required.")
 	private Integer addressId;
+	
+	@NotBlank(message = "Role is required.")
 	private Integer role;
 
 	public User() {

@@ -1,15 +1,21 @@
 package com.perscholas.casestudy.rms.models;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+
 public class Table {
+	@Id
+	@GeneratedValue
 	private Integer tableId;
+	
+	@NotBlank(message = "User Id is required.")
 	private Integer userId;
+	
+	@NotBlank(message = "Order Id is required.")
 	private Integer orderId;
 
-	public Table() {
-		this.tableId = null;
-		this.userId = null;
-		this.orderId = null;
-	}
+	public Table() {}
 
 	public Table(Integer tableId, Integer userId) {
 		this.tableId = tableId;

@@ -30,24 +30,24 @@ public class MariaDbStudentRepository implements StudentRepository {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("name", student.getName());
 		params.addValue("email", student.getEmail());
-		String createStudentSql = "insert into students (name, email) values " + "(:name,:email)";
+		String createSql = "insert into students (name, email) values " + "(:name,:email)";
 
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		Integer createResult = mariaDbJdbcTemplate.update(createStudentSql, params, keyHolder);
+		Integer result = mariaDbJdbcTemplate.update(createSql, params, keyHolder);
 
-		if (createResult > 0)
+		if (result > 0)
 			id = keyHolder.getKey().intValue();
 		return id;
 	}
 
 	@Override
 	public Student getStudentById(Integer id) {
-		String selectStudentsById = "select * from students where studentId = :id";
+		String selectById = "select * from students where studentId = :id";
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("id", id);
 		Student student = null;
 		try {
-			student = (Student) mariaDbJdbcTemplate.queryForObject(selectStudentsById, params, new StudentMapper());
+			student = (Student) mariaDbJdbcTemplate.queryForObject(selectById, params, new StudentMapper());
 		} catch (EmptyResultDataAccessException e) {
 			System.out.println(e.getMessage());
 		}
@@ -56,7 +56,7 @@ public class MariaDbStudentRepository implements StudentRepository {
 
 	@Override
 	public Boolean updateStudent(Student student) {
-		Integer result;
+		Integer result = null;
 		Map<String, Object> params = new HashMap<>();
 		params.put("name", student.getName());
 		params.put("email", student.getEmail());
@@ -71,11 +71,11 @@ public class MariaDbStudentRepository implements StudentRepository {
 
 	@Override
 	public Boolean deleteStudent(Integer studentId) {
-		Integer result;
-		String deleteSql = "delete from students where studentId = :id";
+		Integer result = null;
+		String removeSql = "delete from students where studentId = :id";
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("id", studentId);
-		result = mariaDbJdbcTemplate.update(deleteSql, params);
+		result = mariaDbJdbcTemplate.update(removeSql, params);
 
 		if (result > 0)
 			return true;
@@ -84,8 +84,8 @@ public class MariaDbStudentRepository implements StudentRepository {
 
 	@Override
 	public List<Student> getAllStudents() throws ClassNotFoundException, IOException, SQLException {
-		String selectStudents = "SELECT * FROM students";
-		List<Student> result = mariaDbJdbcTemplate.query(selectStudents, new StudentMapper());
+		String selectGetAll = "SELECT * FROM students";
+		List<Student> result = mariaDbJdbcTemplate.query(selectGetAll, new StudentMapper());
 		return result;
 	}
 

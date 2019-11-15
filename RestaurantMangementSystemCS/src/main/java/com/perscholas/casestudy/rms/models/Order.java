@@ -2,16 +2,22 @@ package com.perscholas.casestudy.rms.models;
 
 import java.sql.Timestamp;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+
 public class Order {
+	@Id
+	@GeneratedValue
 	private Integer orderId;
+	
+	@NotBlank(message = "User Id is required.")
 	private Integer userId;
+	
+	@NotBlank(message = "Time is required.")
 	private Timestamp time;
 
-	public Order() {
-		this.orderId = null;
-		this.userId = null;
-		this.time = null;
-	}
+	public Order() {}
 
 	public Order(Integer orderId, Integer userId, Timestamp time) {
 		this.orderId = orderId;

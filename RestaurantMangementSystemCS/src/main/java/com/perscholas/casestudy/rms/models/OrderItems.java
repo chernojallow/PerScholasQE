@@ -1,17 +1,22 @@
 package com.perscholas.casestudy.rms.models;
 
+import javax.validation.constraints.NotBlank;
+
 public class OrderItems {
+	
+	@NotBlank(message = "Order Id is required.")
 	private Integer orderId;
+	
+	@NotBlank(message = "Item Id is required.")
 	private Integer itemId;
+	
+	@NotBlank(message = "Quantity is required.")
 	private Integer quantity;
+	
+	@NotBlank(message = "Subtotal is required.")
 	private Double subtotal;
 
-	public OrderItems() {
-		this.orderId = null;
-		this.itemId = null;
-		this.quantity = null;
-		this.subtotal = null;
-	}
+	public OrderItems() {}
 
 	public OrderItems(Integer orderId, Integer itemId, Integer quantity) {
 		this.orderId = orderId;

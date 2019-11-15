@@ -3,6 +3,7 @@ package com.perscholas.casestudy.rms.controllers;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +14,13 @@ import com.perscholas.casestudy.rms.daos.AddressDAO;
 import com.perscholas.casestudy.rms.daos.UserDAO;
 import com.perscholas.casestudy.rms.models.Address;
 import com.perscholas.casestudy.rms.models.User;
+import com.perscholas.casestudy.rms.repositories.UserRepository;
 
 @Controller
 public class UserController {
-
+	@Autowired
+	UserRepository uRep;
+	
 	@GetMapping("/")
 	public String showDefaultPage() {
 		return "Login";
