@@ -24,7 +24,6 @@ public class WebAppConfig implements WebMvcConfigurer {
 
 	@Bean
 	ObjectMapper objectMapper() {
-		// INDENT_OUTPUT allows for "pretty printing" of JSON data
 		return new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 	}
 
@@ -37,15 +36,20 @@ public class WebAppConfig implements WebMvcConfigurer {
 	Map<Integer, Student> studentMap() {
 		Map<Integer, Student> sMap = new HashMap<>();
 		Student student;
-		
-		student = new Student(1, "John", "john1234");
-		student.getCourses().add("ASM");
-		student.getCourses().add("DE");
+
+		student = new Student(1, "Lin Xiao", "xiaolin996");
+		student.getCourses().add("Application Developer");
+		student.getCourses().add("Data Engineering");
 		sMap.put(student.getStudentId(), student);
-		
-		student = new Student(2, "Jane", "jane1234");
-		student.getCourses().add("DE");
-		student.getCourses().add("QEA");
+
+		student = new Student(2, "Chen Li", "chenli123");
+		student.getCourses().add("Data Engineering");
+		student.getCourses().add("Quality Engineering and Assurance");
+		sMap.put(student.getStudentId(), student);
+
+		student = new Student(3, "Cherno Jallow", "cherno123");
+		student.getCourses().add("Application Developer");
+		student.getCourses().add("Quality Engineering and Assurance");
 		sMap.put(student.getStudentId(), student);
 		return sMap;
 	}

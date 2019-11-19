@@ -30,25 +30,10 @@ public class RestControllerDemo {
 
 	@GetMapping("/student/{id}")
 	public String getStudent(@PathVariable Integer id) throws JsonProcessingException {
-		/*
-		 * The ObjectMapper class is part of the Jackson library which provides the
-		 * ability to read and write JSON either to or from POJOs or to or from a JSON
-		 * Tree Model. In this case we will write a JSON string from a Student object
-		 * and return it as part of the HTTP response. You can read more about
-		 * ObjectMapper at the following website:
-		 * https://fasterxml.github.io/jackson-databind/javadoc/2.7/com
-		 * /fasterxml/jackson/databind/ObjectMapper.html
-		 */
-
 		if (studentMap.get(id) != null) {
 			Student student = studentMap.get(id);
-			/*
-			 * The student properties are returned to the client (e.g., browser) as a JSON
-			 * string.
-			 */
 			return mapper.writeValueAsString(student);
 		}
-		// The error String is returned to the web client
 		return "Student ID not found";
 	}
 

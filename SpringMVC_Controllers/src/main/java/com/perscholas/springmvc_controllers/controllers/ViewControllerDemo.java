@@ -24,22 +24,11 @@ public class ViewControllerDemo {
 		this.restTemplate = restTemplate;
 	}
 
-	/*
-	 * The showControllerView() method is a basic controller method which returns a
-	 * string that represents a JSP.
-	 */
 	@GetMapping("/")
 	public String showControllerView() {
 		return "ControllerView";
 	}
 
-	/*
-	 * The getStudent() method calls upon a simple REST API provided by the
-	 * "RestControllerDemo" controller class. The RestTemplate class is used to
-	 * retrieve the data provided in JSON format and map it to a Student instance.
-	 * The student instance is then added to the Spring Model and made available to
-	 * the "Student.jsp" view.
-	 */
 	@GetMapping("/displayStudent/{id}")
 	public String getStudent(@PathVariable Integer id, Model model) {
 		restTemplate = new RestTemplate();
@@ -56,11 +45,6 @@ public class ViewControllerDemo {
 		}
 	}
 
-	/*
-	 * The displayStudents() method utilizes the ResponseEntity class to convert the
-	 * JSON data into a Map of type <Integer, Student> that holds all students and
-	 * is passed to the view.
-	 */
 	@GetMapping("/displayStudents")
 	public String displayStudent(Model model) {
 		ResponseEntity<Map<Integer, Student>> response = restTemplate.exchange(
