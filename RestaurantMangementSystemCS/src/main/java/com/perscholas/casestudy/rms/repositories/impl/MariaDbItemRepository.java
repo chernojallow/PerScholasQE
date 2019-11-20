@@ -14,10 +14,12 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import com.perscholas.casestudy.rms.models.Item;
 import com.perscholas.casestudy.rms.repositories.ItemRepository;
 
+@Repository("mariaDbItemRepository")
 public class MariaDbItemRepository implements ItemRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate mariaDbJdbcTemplate;
@@ -31,7 +33,6 @@ public class MariaDbItemRepository implements ItemRepository {
 
 	@Override
 	public Integer create(Item item) throws SQLException, ClassNotFoundException, IOException {
-
 		Integer id = -1;
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("itemName", item.getItemName());
@@ -67,7 +68,7 @@ public class MariaDbItemRepository implements ItemRepository {
 	public Boolean update(Item item) throws SQLException, ClassNotFoundException, IOException {
 		Integer result = null;
 		Map<String, Object> params = new HashMap<>();
-		params.put("itemId", item.getItemName());
+		params.put("itemName", item.getItemName());
 		params.put("categoryId", item.getCategoryId());
 		params.put("price", item.getPrice());
 		params.put("itemId", item.getItemId());
@@ -85,7 +86,7 @@ public class MariaDbItemRepository implements ItemRepository {
 		Integer result;
 		String removeSql = "DELETE FROM item WHERE `itemId` = :itemId;";
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("id", itemId);
+		params.put("itemId", itemId);
 		result = mariaDbJdbcTemplate.update(removeSql, params);
 
 		if (result > 0)

@@ -14,17 +14,19 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import com.perscholas.casestudy.rms.models.OrderItems;
 import com.perscholas.casestudy.rms.repositories.OrderItemsRepository;
 
+@Repository("mariaDbOrderItemsRepository")
 public class MariaDbOrderItemsRepository implements OrderItemsRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate mariaDbJdbcTemplate;
 
 	@Override
 	public List<OrderItems> getAll() throws SQLException {
-		String selectGetAll = "SELECT * FROM students";
+		String selectGetAll = "SELECT * FROM `order_items`";
 		List<OrderItems> result = mariaDbJdbcTemplate.query(selectGetAll, new OrderItemsMapper());
 		return result;
 	}
