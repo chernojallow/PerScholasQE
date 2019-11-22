@@ -1,5 +1,4 @@
-DROP DATABASE IF EXISTS `case_study`;
-CREATE DATABASE `case_study`; 
+CREATE DATABASE IF NOT EXISTS `case_study`; 
 USE `case_study`; 
 SET FOREIGN_KEY_CHECKS=0;
 
@@ -22,7 +21,7 @@ CREATE TABLE `user` (
 	`addressId` INT NOT NULL,
 	`role` TINYINT NOT NULL,
 	PRIMARY KEY (`userID`),
-	UNIQUE KEY `username` (`username`),
+	UNIQUE (`username`),
 	CONSTRAINT `user_fk_addressId` FOREIGN KEY (`addressId`)
 		REFERENCES `address` (`addressId`)
         ON UPDATE CASCADE ON DELETE CASCADE
@@ -43,7 +42,7 @@ DROP TABLE if EXISTS `table`;
 CREATE TABLE `table` (
 	`tableId` INT NOT NULL,
 	`userId` INT NOT NULL,
-	`orderId` INT,
+	`orderId` INT DEFAULT -1,
 	PRIMARY KEY (`tableId`, `userId`),
 	CONSTRAINT `table_fk_userId` FOREIGN KEY (`userId`)
 		REFERENCES `user` (`userId`)
@@ -95,7 +94,7 @@ INSERT INTO `address` (`address1`, `address2`, `city`, `state`, `postalCode`) VA
 /* user */
 INSERT INTO `user` (`username`, `password`, `addressId`, `role`) VALUES ('xiaolin996', 'xiaolin996', 1, 1);
 INSERT INTO `user` (`username`, `password`, `addressId`, `role`) VALUES ('chenli123', 'chenli123', 2, 2);
-INSERT INTO `user` (`username`, `password`, `addressId`, `role`) VALUES ('xiaolin123', 'xiaolin123', 3, 2);
+INSERT INTO `user` (`username`, `password`, `addressId`, `role`) VALUES ('xiaolin123', 'xiaolin123', 3, 3);
 
 /* table */
 INSERT INTO `table` (`userId`, `tableId`) VALUES (1, 1);

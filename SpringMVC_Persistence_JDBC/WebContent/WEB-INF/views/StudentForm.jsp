@@ -21,7 +21,7 @@
 	        <div>
 	            <form:input path="name" />
 	            <p><form:errors path="name" class="error"/></p>
-		</div>
+			</div>
 	    </div>
 
 	    <div>
