@@ -4,20 +4,21 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class OrderItems {
-	
+
 	@NotBlank(message = "Order Id is required.")
 	private Integer orderId;
-	
+
 	@NotNull(message = "Item Id is required.")
 	private Integer itemId;
-	
+
 	@NotNull(message = "Quantity is required.")
 	private Integer quantity;
-	
+
 	@NotNull(message = "Subtotal is required.")
 	private Double subtotal;
 
-	public OrderItems() {}
+	public OrderItems() {
+	}
 
 	public OrderItems(Integer orderId, Integer itemId, Integer quantity) {
 		this.orderId = orderId;

@@ -6,9 +6,7 @@ import java.util.List;
 
 import com.perscholas.casestudy.rms.models.Order;
 
-public interface OrderRepository {
-	List<Order> getAll() throws SQLException;
-	
+public interface OrderRepository {	
 	Integer create(Order order) throws SQLException, ClassNotFoundException, IOException;
 	
 	Order getById(Integer orderId) throws ClassNotFoundException, IOException, SQLException;
@@ -16,4 +14,6 @@ public interface OrderRepository {
 	Boolean update(Order order) throws SQLException, ClassNotFoundException, IOException;
 	
 	Boolean remove(Integer orderId) throws IOException, SQLException;
+
+	List<Order> getAllByAddressId(Integer addressId) throws SQLException;
 }

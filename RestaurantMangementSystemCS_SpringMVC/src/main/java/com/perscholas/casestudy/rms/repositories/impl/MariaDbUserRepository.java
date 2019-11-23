@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class MariaDbUserRepository implements UserRepository {
 		params.addValue("addressId", user.getAddressId());
 		params.addValue("role", user.getRole());
 		String createSql = "INSERT INTO `user` (`username`, `password`, `addressId`, `role`) VALUES (:username, :password, :addressId, :role);";
-		
+
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		Integer result = mariaDbJdbcTemplate.update(createSql, params, keyHolder);
 
@@ -55,6 +56,13 @@ public class MariaDbUserRepository implements UserRepository {
 		}
 
 		return user;
+	}
+
+	@Override
+	public List<User> getAllByAddressId(Integer addressId) throws ClassNotFoundException, IOException, SQLException {
+		String selectAllByAddressId = "SELECT * FROM `user` WHERE `addressId` = " + addressId;
+		List<User> result = mariaDbJdbcTemplate.query(selectAllByAddressId, new UserMapper());
+		return result;
 	}
 
 	@Override

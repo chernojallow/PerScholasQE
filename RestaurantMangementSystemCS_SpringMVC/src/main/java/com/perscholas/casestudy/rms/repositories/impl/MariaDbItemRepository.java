@@ -25,8 +25,8 @@ public class MariaDbItemRepository implements ItemRepository {
 	private NamedParameterJdbcTemplate mariaDbJdbcTemplate;
 
 	@Override
-	public List<Item> getAll() throws SQLException {
-		String selectGetAll = "SELECT * FROM item;";
+	public List<Item> getAllByAddressId(Integer addressId) throws SQLException {
+		String selectGetAll = "SELECT i.itemId, i.itemName, i.categoryId, i.addressId, i.price FROM item i JOIN address a ON i.addressId = a.addressId WHERE i.addressId = " + addressId;
 		List<Item> result = mariaDbJdbcTemplate.query(selectGetAll, new ItemMapper());
 		return result;
 	}

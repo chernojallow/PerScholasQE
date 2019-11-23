@@ -9,16 +9,22 @@ public class Table {
 	@GeneratedValue
 	private Integer tableId;
 	
-	@NotNull(message = "User Id is required.")
-	private Integer userId;
+	@NotNull(message = "Address Id is required.")
+	private Integer addressId;
 	
 	private Integer orderId;
 
 	public Table() {}
 
-	public Table(Integer tableId, Integer userId) {
+	public Table(Integer tableId, @NotNull(message = "Address Id is required.") Integer addressId) {
 		this.tableId = tableId;
-		this.userId = userId;
+		this.addressId = addressId;
+	}
+	
+	public Table(Integer tableId, @NotNull(message = "Address Id is required.") Integer addressId, Integer orderId) {
+		this.tableId = tableId;
+		this.addressId = addressId;
+		this.orderId = orderId;
 	}
 
 	public Integer getTableId() {
@@ -29,12 +35,12 @@ public class Table {
 		this.tableId = tableId;
 	}
 
-	public Integer getUserId() {
-		return userId;
+	public Integer getAddressId() {
+		return addressId;
 	}
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setAddressId(Integer addressId) {
+		this.addressId = addressId;
 	}
 
 	public Integer getOrderId() {
@@ -47,6 +53,6 @@ public class Table {
 
 	@Override
 	public String toString() {
-		return "Table [tableId=" + tableId + ", userId=" + userId + ", orderId=" + orderId + "]";
+		return "Table [tableId=" + tableId + ", addressId=" + addressId + ", orderId=" + orderId + "]";
 	}
 }

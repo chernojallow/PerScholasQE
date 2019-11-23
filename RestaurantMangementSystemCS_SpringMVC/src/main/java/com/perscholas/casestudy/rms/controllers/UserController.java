@@ -13,10 +13,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.perscholas.casestudy.rms.models.Address;
 import com.perscholas.casestudy.rms.models.Registration;
 import com.perscholas.casestudy.rms.models.User;
 import com.perscholas.casestudy.rms.repositories.AddressRepository;
+import com.perscholas.casestudy.rms.repositories.CategoryRepository;
+import com.perscholas.casestudy.rms.repositories.ItemRepository;
+import com.perscholas.casestudy.rms.repositories.TableRepository;
 import com.perscholas.casestudy.rms.repositories.UserRepository;
 
 @Controller
@@ -26,6 +31,15 @@ public class UserController {
 
 	@Autowired
 	private AddressRepository aRep;
+	
+	@Autowired
+	private TableRepository tRep;
+	
+	@Autowired
+	private CategoryRepository cRep;
+	
+	@Autowired
+	private ItemRepository iRep;
 
 	@GetMapping(value = { "/", "/login" })
 	public String showLoginPage(Model model) {
@@ -34,8 +48,13 @@ public class UserController {
 	}
 
 	@PostMapping("/loginUser")
-	public String loginUser(@Valid @ModelAttribute("login") User login, BindingResult result, Model model, HttpSession session)
-			throws ClassNotFoundException, IOException, SQLException {
+	public String loginUser(@Valid @ModelAttribute("login") User login, BindingResult result, Model model,
+			HttpSession session) throws ClassNotFoundException, IOException, SQLException {
+		if (result.hasErrors()) {
+			model.addAttribute("errorMessage", "haserrors()");
+			return "Login";
+		}
+
 		User u = uRep.getByName(login.getUsername());
 
 		if (u == null) {
@@ -102,19 +121,74 @@ public class UserController {
 
 		return "redirect:/login";
 	}
-	
+
 	@GetMapping("/showProfile")
-	public String showProfile() throws ClassNotFoundException, IOException, SQLException {
+	public String showProfile(HttpSession session, Model model)
+			throws ClassNotFoundException, IOException, SQLException {
+		User u = (User) session.getAttribute("currentUser");
+		model.addAttribute("subusers", uRep.getAllByAddressId(u.getAddressId()));
 		return "Profile";
 	}
-	
-	@GetMapping("/showUpdate")
-	public String showUpdate() {
-		return "Update";
+
+	@GetMapping("/showChangePassword")
+	public String showUpdate(Model model) {
+		model.addAttribute("user", new User());
+		return "ChangePassword";
+	}
+
+	@PostMapping("/changePassword")
+	public String changePassword(@Valid @ModelAttribute("user") User user, BindingResult result, HttpSession session)
+			throws ClassNotFoundException, SQLException, IOException {
+		if (result.hasErrors()) {
+			return "ChangePassword";
+		}
+
+		User u = (User) session.getAttribute("currentUser");
+		u.setPassword(user.getPassword());
+
+		uRep.update(u);
+		session.removeAttribute("currentUser");
+		session.setAttribute("currentUser", u);
+
+		return "redirect:/showProfile";
+	}
+
+	@GetMapping("/deleteSubuser")
+	public String deleteSubuser(@RequestParam Integer userId) throws IOException, SQLException {
+		uRep.remove(userId);
+		return "redirect:/showProfile";
+	}
+
+	@GetMapping("/showAddSubuser")
+	public String showAddSubuser(Model model) {
+		model.addAttribute("subuser", new User());
+		return "AddSubuser";
+	}
+
+	@PostMapping("/registerSubuser")
+	public String registerSubuser(@Valid @ModelAttribute("subuser") User subuser, BindingResult result,
+			HttpSession session) throws ClassNotFoundException, SQLException, IOException {
+		if (result.hasErrors()) {
+			return "ChangePassword";
+		}
+		
+		uRep.create(subuser);
+		
+		return "redirect:/showProfile";
+	}
+
+	@GetMapping("/showSetup")
+	public String showSetup(HttpSession session, Model model) throws ClassNotFoundException, IOException, SQLException {
+		User u = (User) session.getAttribute("currentUser");
+		model.addAttribute("tables", Integer.class);
+		model.addAttribute("nbrOfTables", tRep.getNbrOfTablesByAddressId(u.getAddressId()));
+		model.addAttribute("allCategories", cRep.getAllByAddressId(u.getAddressId()));
+		model.addAttribute("allItems", iRep.getAllByAddressId(u.getAddressId()));
+		return "Setup";
 	}
 	
-	@PostMapping("/updateProfile")
-	public String updateProfile() {
+	@PostMapping("/setup")
+	public String setup() {
 		
 		return null;
 	}

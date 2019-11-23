@@ -7,7 +7,7 @@ import java.util.List;
 import com.perscholas.casestudy.rms.models.Item;
 
 public interface ItemRepository {
-	List<Item> getAll() throws SQLException;
+	List<Item> getAllByAddressId(Integer addressId) throws SQLException;
 	
 	Integer create(Item item) throws SQLException, ClassNotFoundException, IOException;
 	
