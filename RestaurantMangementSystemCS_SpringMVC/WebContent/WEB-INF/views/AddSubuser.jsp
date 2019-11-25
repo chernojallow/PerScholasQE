@@ -13,7 +13,7 @@
 </head>
 <body>
 	<h1>&emsp;Add Subuser</h1>
-	<p>&emsp;<%@ include file="Navigation.html" %> </p>
+	<p>&emsp;<%@ include file="Navigation.jsp" %> </p>
 	
 	<form:form action="${pageContext.request.contextPath}/registerSubuser" method="post" modelAttribute="subuser">
 		<fieldset>

@@ -12,6 +12,6 @@
 </head>
 <body>
 	<h1>Welcome ${currentUser.username}</h1>
-	<p> <%@ include file="Navigation.html" %> </p>
+	<p> <%@ include file="Navigation.jsp" %> </p>
 </body>
 </html>

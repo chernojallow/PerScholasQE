@@ -13,7 +13,7 @@
 </head>
 <body>
 	<h1>&emsp;${currentUser.username}'s Profile</h1>
-	<p>&emsp;<%@ include file="Navigation.html" %> </p>
+	<p>&emsp;<%@ include file="Navigation.jsp" %> </p>
 	
 	<h2>&emsp;Username: ${currentUser.username}</h2>
 	

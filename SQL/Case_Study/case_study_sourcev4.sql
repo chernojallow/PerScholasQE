@@ -118,7 +118,9 @@ INSERT INTO `table` (`addressId`, `tableId`) VALUES (3, 3);
 INSERT INTO `category` (`categoryName`) VALUES ('category1');
 INSERT INTO `category` (`categoryName`) VALUES ('category2');
 INSERT INTO `category` (`categoryName`) VALUES ('category3');
+INSERT INTO `category` (`categoryName`) VALUES ('category4');
 
+INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item10', 11.11, 4, 1);
 /* item */
 INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item1', 11.11, 1, 1);
 INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item2', 2.22, 1, 1);

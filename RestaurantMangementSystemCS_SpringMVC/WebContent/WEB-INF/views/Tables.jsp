@@ -13,7 +13,7 @@
 </head>
 <body>
 	<h1>&emsp;Tables</h1>
-	<p>&emsp;<%@ include file="Navigation.html" %> </p>	
+	<p>&emsp;<%@ include file="Navigation.jsp" %> </p>	
 	
 	<c:forEach items="${allTables}" var="table">
 		&emsp;&emsp;
