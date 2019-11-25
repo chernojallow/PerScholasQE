@@ -25,8 +25,17 @@ public class MariaDbOrderItemsRepository implements OrderItemsRepository {
 	private NamedParameterJdbcTemplate mariaDbJdbcTemplate;
 
 	@Override
-	public List<OrderItems> getAll() throws SQLException {
-		String selectGetAll = "SELECT * FROM `order_items`";
+	public List<OrderItems> getAllByAddressIdOnTable(Integer tableId) throws SQLException {
+		String selectGetAll = "SELECT order_items.orderId, order_items.itemId, order_items.quantity, order_items.subtotal FROM order_items JOIN `order` ON order_items.orderId = `order`.orderId JOIN `table` ON `order`.orderId = `table`.orderId JOIN address ON `table`.addressId = address.addressId WHERE address.addressId = "
+				+ tableId;
+		List<OrderItems> result = mariaDbJdbcTemplate.query(selectGetAll, new OrderItemsMapper());
+		return result;
+	}
+
+	@Override
+	public List<OrderItems> getAllByAddressId(Integer addressId) throws SQLException {
+		String selectGetAll = "SELECT order_items.orderId, order_items.itemId, order_items.quantity, order_items.subtotal FROM order_items JOIN `order` ON order_items.orderId = `order`.orderId JOIN address ON `order`.addressId = address.addressId WHERE address.addressId = "
+				+ addressId;
 		List<OrderItems> result = mariaDbJdbcTemplate.query(selectGetAll, new OrderItemsMapper());
 		return result;
 	}

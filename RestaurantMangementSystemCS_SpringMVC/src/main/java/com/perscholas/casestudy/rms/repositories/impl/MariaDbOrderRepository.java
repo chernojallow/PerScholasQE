@@ -25,8 +25,8 @@ public class MariaDbOrderRepository implements OrderRepository {
 	private NamedParameterJdbcTemplate mariaDbJdbcTemplate;
 	
 	@Override
-	public List<Order> getAll() throws SQLException {
-		String selectGetAll = "SELECT * FROM `order`;";
+	public List<Order> getAllByAddressId(Integer addressId) throws SQLException {
+		String selectGetAll = "SELECT * FROM `order` WHERE `addressId` = " + addressId;
 		List<Order> result = mariaDbJdbcTemplate.query(selectGetAll, new OrderMapper());
 		return result;
 	}
@@ -35,9 +35,10 @@ public class MariaDbOrderRepository implements OrderRepository {
 	public Integer create(Order order) throws SQLException, ClassNotFoundException, IOException {
 		Integer id = -1;
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("userId", order.getUserId());
-		params.addValue("time", order.getTime());
-		String createSql = "INSERT INTO `order` (`userId`, `time`) VALUES (:userId, :time);";
+		params.addValue("addressId", order.getAddressId());
+		params.addValue("start", order.getStart());
+		params.addValue("end", order.getEnd());
+		String createSql = "INSERT INTO `order` (`addressId`, `start`, `end`) VALUES (:addressId, :start, :end);";
 
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		Integer result = mariaDbJdbcTemplate.update(createSql, params, keyHolder);
@@ -67,11 +68,12 @@ public class MariaDbOrderRepository implements OrderRepository {
 	public Boolean update(Order order) throws SQLException, ClassNotFoundException, IOException {
 		Integer result = null;
 		Map<String, Object> params = new HashMap<>();
-		params.put("userId", order.getUserId());
-		params.put("time", order.getTime());
+		params.put("addressId", order.getAddressId());
+		params.put("start", order.getStart());
+		params.put("end", order.getEnd());
 		params.put("orderId", order.getOrderId());
 		
-		String updateSql = "UPDATE `order` SET `userId` = :userId, `time` = :time WHERE `orderId` = :orderId;";
+		String updateSql = "UPDATE `order` SET `addressId` = :addressId, `time` = :time WHERE `orderId` = :orderId;";
 		result = mariaDbJdbcTemplate.update(updateSql, params);
 
 		if (result > 0)
@@ -97,8 +99,9 @@ public class MariaDbOrderRepository implements OrderRepository {
 		public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Order order = new Order();
 			order.setOrderId(rs.getInt(1));
-			order.setUserId(rs.getInt(2));
-			order.setTime(rs.getTimestamp(3));
+			order.setAddressId(rs.getInt(2));
+			order.setStart(rs.getTimestamp(3));
+			order.setStart(rs.getTimestamp(4));
 			return order;
 		}
 	}

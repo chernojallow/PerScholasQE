@@ -19,6 +19,9 @@ import com.perscholas.casestudy.rms.models.Address;
 import com.perscholas.casestudy.rms.models.Registration;
 import com.perscholas.casestudy.rms.models.User;
 import com.perscholas.casestudy.rms.repositories.AddressRepository;
+import com.perscholas.casestudy.rms.repositories.CategoryRepository;
+import com.perscholas.casestudy.rms.repositories.ItemRepository;
+import com.perscholas.casestudy.rms.repositories.TableRepository;
 import com.perscholas.casestudy.rms.repositories.UserRepository;
 
 @Controller
@@ -28,6 +31,15 @@ public class UserController {
 
 	@Autowired
 	private AddressRepository aRep;
+	
+	@Autowired
+	private TableRepository tRep;
+	
+	@Autowired
+	private CategoryRepository cRep;
+	
+	@Autowired
+	private ItemRepository iRep;
 
 	@GetMapping(value = { "/", "/login" })
 	public String showLoginPage(Model model) {
@@ -155,11 +167,32 @@ public class UserController {
 
 	@PostMapping("/registerSubuser")
 	public String registerSubuser(@Valid @ModelAttribute("subuser") User subuser, BindingResult result,
-			HttpSession session) {
-
-		return null;
+			HttpSession session) throws ClassNotFoundException, SQLException, IOException {
+		if (result.hasErrors()) {
+			return "ChangePassword";
+		}
+		
+		uRep.create(subuser);
+		
+		return "redirect:/showProfile";
 	}
 
+	@GetMapping("/showSetup")
+	public String showSetup(HttpSession session, Model model) throws ClassNotFoundException, IOException, SQLException {		
+		User u = (User) session.getAttribute("currentUser");
+		model.addAttribute("tables", Integer.class);
+		model.addAttribute("nbrOfTables", tRep.getNbrOfTablesByAddressId(u.getAddressId()));
+		model.addAttribute("allCategories", cRep.getAllByAddressId(u.getAddressId()));
+		model.addAttribute("allItems", iRep.getAllByAddressId(u.getAddressId()));
+		return "Setup";
+	}
+	
+	@PostMapping("/setup")
+	public String setup() {
+		
+		return null;
+	}
+	
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();

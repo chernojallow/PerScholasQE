@@ -30,26 +30,27 @@ CREATE TABLE `user` (
 DROP TABLE if EXISTS `order`;
 CREATE TABLE `order` (
 	`orderId` INT NOT NULL AUTO_INCREMENT,
-	`userId` INT NOT NULL,
-	`time` TIMESTAMP NOT NULL,
+	`addressId` INT NOT NULL,
+	`start` DATETIME NOT NULL,
+	`end` DATETIME DEFAULT NULL,
 	PRIMARY KEY (`orderId`),
-	CONSTRAINT `order_fk_userId` FOREIGN KEY (`userId`)
-		REFERENCES `user` (`userId`)
+	CONSTRAINT `order_fk_addressId` FOREIGN KEY (`addressId`)
+		REFERENCES `address` (`addressId`)
 			ON UPDATE CASCADE ON DELETE CASCADE
 ) DEFAULT CHARSET=UTF8;
 
 DROP TABLE if EXISTS `table`;
 CREATE TABLE `table` (
 	`tableId` INT NOT NULL,
-	`userId` INT NOT NULL,
-	`orderId` INT DEFAULT -1,
-	PRIMARY KEY (`tableId`, `userId`),
-	CONSTRAINT `table_fk_userId` FOREIGN KEY (`userId`)
-		REFERENCES `user` (`userId`)
+	`addressId` INT NOT NULL,
+	`orderId` INT DEFAULT NULL,
+	PRIMARY KEY (`tableId`, `addressId`),
+	CONSTRAINT `table_fk_addressId` FOREIGN KEY (`addressId`)
+		REFERENCES `address` (`addressId`)
 			ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `table_fk_orderId` FOREIGN KEY (`orderId`)
 		REFERENCES `order` (`orderId`)
-			ON UPDATE CASCADE ON DELETE cascade
+			ON UPDATE CASCADE ON DELETE CASCADE
 ) DEFAULT CHARSET=UTF8;
 
 DROP TABLE if EXISTS `item`;
@@ -57,10 +58,14 @@ CREATE TABLE `item` (
 	`itemId` INT NOT NULL AUTO_INCREMENT,
 	`itemName` VARCHAR(50) NOT NULL,
 	`categoryId` INT NOT NULL,
+	`addressId` INT NOT NULL,
 	`price` DOUBLE NOT NULL,
 	PRIMARY KEY (`itemId`),
 	CONSTRAINT `item_fk_categoryId` FOREIGN KEY (`categoryId`)
 		REFERENCES `category` (`categoryId`)
+			ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT `item_fk_addressId` FOREIGN KEY (`addressId`)
+		REFERENCES `address` (`addressId`)
 			ON UPDATE CASCADE ON DELETE CASCADE
 ) DEFAULT CHARSET=UTF8;
 
@@ -99,31 +104,33 @@ INSERT INTO `user` (`username`, `password`, `addressId`, `role`) VALUES ('chenli
 INSERT INTO `user` (`username`, `password`, `addressId`, `role`) VALUES ('xiaolin123', 'xiaolin123', 3, 3);
 
 /* table */
-INSERT INTO `table` (`userId`, `tableId`) VALUES (1, 1);
-INSERT INTO `table` (`userId`, `tableId`) VALUES (1, 2);
-INSERT INTO `table` (`userId`, `tableId`) VALUES (1, 3);
-INSERT INTO `table` (`userId`, `tableId`) VALUES (2, 1);
-INSERT INTO `table` (`userId`, `tableId`) VALUES (2, 2);
-INSERT INTO `table` (`userId`, `tableId`) VALUES (2, 3);
-INSERT INTO `table` (`userId`, `tableId`) VALUES (3, 1);
-INSERT INTO `table` (`userId`, `tableId`) VALUES (3, 2);
-INSERT INTO `table` (`userId`, `tableId`) VALUES (3, 3);
+INSERT INTO `table` (`addressId`, `tableId`, `orderId`) VALUES (1, 1, 1);
+INSERT INTO `table` (`addressId`, `tableId`) VALUES (1, 2);
+INSERT INTO `table` (`addressId`, `tableId`) VALUES (1, 3);
+INSERT INTO `table` (`addressId`, `tableId`) VALUES (2, 1);
+INSERT INTO `table` (`addressId`, `tableId`) VALUES (2, 2);
+INSERT INTO `table` (`addressId`, `tableId`) VALUES (2, 3);
+INSERT INTO `table` (`addressId`, `tableId`) VALUES (3, 1);
+INSERT INTO `table` (`addressId`, `tableId`) VALUES (3, 2);
+INSERT INTO `table` (`addressId`, `tableId`) VALUES (3, 3);
 
 /* category */
 INSERT INTO `category` (`categoryName`) VALUES ('category1');
 INSERT INTO `category` (`categoryName`) VALUES ('category2');
 INSERT INTO `category` (`categoryName`) VALUES ('category3');
+INSERT INTO `category` (`categoryName`) VALUES ('category4');
 
 /* item */
-INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item1', 11.11, 1);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item2', 2.22, 1);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item3', 33.33, 1);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item4', 44.44, 2);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item5', 55.55, 2);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item6', 6.6, 2);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item7', 7.77, 3);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item8', 88.8, 3);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item9', .99, 3);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item1', 11.11, 1, 1);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item2', 2.22, 1, 1);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item3', 33.33, 1, 1);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item4', 44.44, 2, 2);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item5', 55.55, 2, 2);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item6', 6.6, 2, 2);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item7', 7.77, 3, 3);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item8', 88.8, 3, 3);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item9', .99, 3, 3);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item10', 11.11, 4, 1);
 
 /* order_items */
 INSERT INTO `order_items` (`orderId`, `itemId`, `quantity`, `subtotal`) VALUES (1, 1, 1, ROUND((SELECT `price` FROM `item` WHERE `itemId` = 1) * 1, 2));
@@ -135,14 +142,16 @@ INSERT INTO `order_items` (`orderId`, `itemId`, `quantity`, `subtotal`) VALUES (
 INSERT INTO `order_items` (`orderId`, `itemId`, `quantity`, `subtotal`) VALUES (3, 7, 1, ROUND((SELECT `price` FROM `item` WHERE `itemId` = 7) * 1, 2));
 INSERT INTO `order_items` (`orderId`, `itemId`, `quantity`, `subtotal`) VALUES (3, 8, 2, ROUND((SELECT `price` FROM `item` WHERE `itemId` = 8) * 2, 2));
 INSERT INTO `order_items` (`orderId`, `itemId`, `quantity`, `subtotal`) VALUES (3, 9, 3, ROUND((SELECT `price` FROM `item` WHERE `itemId` = 9) * 3, 2));
+INSERT INTO `order_items` (`orderId`, `itemId`, `quantity`, `subtotal`) VALUES (4, 9, 3, ROUND((SELECT `price` FROM `item` WHERE `itemId` = 9) * 3, 2));
+
 
 /* order */
-INSERT INTO `order` (`userId`, `time`) VALUES (1, CURRENT_TIMESTAMP);
-INSERT INTO `order` (`userId`, `time`) VALUES (1, CURRENT_TIMESTAMP);
-INSERT INTO `order` (`userId`, `time`) VALUES (1, CURRENT_TIMESTAMP);
-INSERT INTO `order` (`userId`, `time`) VALUES (2, CURRENT_TIMESTAMP);
-INSERT INTO `order` (`userId`, `time`) VALUES (2, CURRENT_TIMESTAMP);
-INSERT INTO `order` (`userId`, `time`) VALUES (2, CURRENT_TIMESTAMP);
-INSERT INTO `order` (`userId`, `time`) VALUES (3, CURRENT_TIMESTAMP);
-INSERT INTO `order` (`userId`, `time`) VALUES (3, CURRENT_TIMESTAMP);
-INSERT INTO `order` (`userId`, `time`) VALUES (3, CURRENT_TIMESTAMP);
+INSERT INTO `order` (`addressId`, `start`, `end`) VALUES (1, CURRENT_TIME, NULL);
+INSERT INTO `order` (`addressId`, `start`, `end`) VALUES (1, CURRENT_TIME, CURRENT_TIME);
+INSERT INTO `order` (`addressId`, `start`, `end`) VALUES (1, CURRENT_TIME, NULL);
+INSERT INTO `order` (`addressId`, `start`, `end`) VALUES (2, CURRENT_TIME, CURRENT_TIME);
+INSERT INTO `order` (`addressId`, `start`, `end`) VALUES (2, CURRENT_TIME, NULL);
+INSERT INTO `order` (`addressId`, `start`, `end`) VALUES (2, CURRENT_TIME, CURRENT_TIME);
+INSERT INTO `order` (`addressId`, `start`, `end`) VALUES (3, CURRENT_TIME, NULL);
+INSERT INTO `order` (`addressId`, `start`, `end`) VALUES (3, CURRENT_TIME, CURRENT_TIME);
+INSERT INTO `order` (`addressId`, `start`, `end`) VALUES (3, CURRENT_TIME, NULL);

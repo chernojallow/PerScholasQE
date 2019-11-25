@@ -5,35 +5,37 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <style>
 	.error {color: red;}
 </style>
 <title>Registration Page</title>
 </head>
 <body>
-	<h1>Registration Page</h1>
+	<h1>&emsp;Registration Page</h1>
 	<p class="error">${errorMessage}</p>
 	
 	<form:form action="${pageContext.request.contextPath}/registerUser" method="post" modelAttribute="registration">
 		<fieldset>
-			<p> <label>Username:&nbsp;<form:input path="username" placeholder="username123" required="required"/> </label> </p>
+			<p> <label>&emsp;Username:&nbsp;<form:input path="username" placeholder="username123" required="required"/> </label> </p>
 			<p> <form:errors path="username" class="error" /> </p>
 			
-			<p> <label>Password:&nbsp;<form:input path="password" type="password" placeholder="password123" required="required" /> </label> </p>
+			<p> <label>&emsp;Password:&nbsp;<form:input path="password" type="password" placeholder="password123" required="required" /> </label> </p>
 			<p> <form:errors path="password" class="error" /> </p>
 			
-			<p> <label>Address 1:&nbsp;<form:input path="address1" placeholder="100 Address St." required="required"/></label> </p>
+			<p> <label>&emsp;Address 1:&nbsp;<form:input path="address1" placeholder="100 Address St." required="required"/></label> </p>
 			<p> <form:errors path="address1" class="error" /> </p>
 			
-			<p> <label>Address 2:&nbsp;<form:input path="address2" placeholder="Apt 111"/></label> </p>
+			<p> <label>&emsp;Address 2:&nbsp;<form:input path="address2" placeholder="Apt 111"/></label> </p>
 			<p> <form:errors path="address2" class="error" /> </p>
 			
-			<p> <label>City:&nbsp;<form:input path="city" placeholder="City" required="required"/></label> </p>
+			<p> <label>&emsp;City:&nbsp;<form:input path="city" placeholder="City" required="required"/></label> </p>
 			<p> <form:errors path="city" class="error" /> </p>
 			
-			<p> <label>State:&nbsp;<form:select path="state">
+			<p> <label>&emsp;State:&nbsp;<form:select path="state">
 				<option value="AL">Alabama</option>
 				<option value="AK">Alaska</option>
 				<option value="AZ">Arizona</option>
@@ -87,12 +89,12 @@
 			</form:select> </label> <p>
 			<p> <form:errors path="state" class="error" /> </p>
 			
-			<p> <label>Zip Code:&nbsp;<form:input path="postalCode" type="number" placeholder="12345" required="required"/> </label> </p>
+			<p> <label>&emsp;Zip Code:&nbsp;<form:input path="postalCode" type="number" placeholder="12345" required="required"/> </label> </p>
 			<p> <form:errors path="postalCode" class="error" /> </p>
 			
-			<p> <input type=submit value="Register" /> <input type="reset" value="Clear"/> </p>
+			<p>&emsp;<input type=submit value="Register" />&emsp;<input type="reset" value="Clear"/> </p>
 		</fieldset>
 	</form:form>
-	<p> <a href="${pageContext.request.contextPath}/login">Return to login</a> </p>
+	<p>&emsp;<a href="${pageContext.request.contextPath}/login">Return to login</a> </p>
 </body>
 </html>

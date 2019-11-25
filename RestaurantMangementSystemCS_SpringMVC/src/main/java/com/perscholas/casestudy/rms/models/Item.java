@@ -4,31 +4,35 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 public class Item {
 	@Id
 	@GeneratedValue
 	private Integer itemId;
-	
-	@Size(min = 1, max=50, message="Item name must be between 1 and 50 characters long.")
-	@NotBlank(message="Item name is required.")
+
+	@NotBlank(message = "Item name is required.")
 	private String itemName;
-	
-	@Size(min = 1, max=50, message="Item name must be between 1 and 50 characters long.")
-	@NotNull(message="Item name is required.")
+
+	@NotNull(message = "Category ID is required.")
 	private Integer categoryId;
-	
-	@NotNull(message="Item name is required.")
+
+	@NotNull(message = "Address ID is required.")
+	private Integer addressId;
+
+	@NotNull(message = "Price is required.")
 	private Double price;
 
-	public Item() {}
+	public Item() {
+	}
 
-	public Item(Integer itemId, String itemName, Integer categoryId, Double price) {
-		super();
+	public Item(Integer itemId, @NotBlank(message = "Item name is required.") String itemName,
+			@NotNull(message = "Category ID is required.") Integer categoryId,
+			@NotNull(message = "Address ID is required.") Integer addressId,
+			@NotNull(message = "Price is required.") Double price) {
 		this.itemId = itemId;
 		this.itemName = itemName;
 		this.categoryId = categoryId;
+		this.addressId = addressId;
 		this.price = price;
 	}
 
@@ -56,6 +60,14 @@ public class Item {
 		this.categoryId = categoryId;
 	}
 
+	public Integer getAddressId() {
+		return addressId;
+	}
+
+	public void setAddressId(Integer addressId) {
+		this.addressId = addressId;
+	}
+
 	public Double getPrice() {
 		return price;
 	}
@@ -66,7 +78,7 @@ public class Item {
 
 	@Override
 	public String toString() {
-		return "Item [itemId=" + itemId + ", itemName=" + itemName + ", categoryId=" + categoryId + ", price=" + price
-				+ "]";
+		return "Item [itemId=" + itemId + ", itemName=" + itemName + ", categoryId=" + categoryId + ", addressId="
+				+ addressId + ", price=" + price + "]";
 	}
 }

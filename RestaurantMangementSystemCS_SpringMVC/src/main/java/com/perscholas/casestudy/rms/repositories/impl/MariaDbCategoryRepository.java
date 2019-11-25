@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,14 @@ import com.perscholas.casestudy.rms.repositories.CategoryRepository;
 public class MariaDbCategoryRepository implements CategoryRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate mariaDbJdbcTemplate;
+
+	@Override
+	public List<Category> getAllByAddressId(Integer addressId) {
+		String selectById = "SELECT c.categoryId, c.categoryName FROM `category` c JOIN item i ON c.categoryId = i.categoryId JOIN address a ON i.addressId = a.addressId WHERE a.addressId = "
+				+ addressId + " GROUP BY categoryId;";
+		List<Category> result = mariaDbJdbcTemplate.query(selectById, new CategoryMapper());
+		return result;
+	}
 
 	@Override
 	public Integer create(Category category) throws SQLException, ClassNotFoundException, IOException {

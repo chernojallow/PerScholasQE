@@ -7,11 +7,13 @@ import java.util.List;
 import com.perscholas.casestudy.rms.models.Table;
 
 public interface TableRepository {
-	Boolean create(Integer userId, Integer tableId) throws SQLException, ClassNotFoundException, IOException;
-
-	public List<Table> getById(Integer userId) throws ClassNotFoundException, IOException, SQLException;
+	List<Table> getAllByAddressId(Integer addressId) throws ClassNotFoundException, IOException, SQLException;
+	
+	Integer getNbrOfTablesByAddressId(Integer addressId);
+	
+	Boolean create(Integer tableId, Integer addressId) throws SQLException, ClassNotFoundException, IOException;
 
 	Boolean update(Table table, Integer newOrderId) throws SQLException, ClassNotFoundException, IOException;
 
-	Boolean remove(Integer tableId, Integer userId) throws IOException, SQLException;
+	Boolean remove(Integer tableId, Integer addressId) throws IOException, SQLException;
 }
