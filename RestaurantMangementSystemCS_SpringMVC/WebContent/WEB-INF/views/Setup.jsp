@@ -30,7 +30,7 @@
 			<c:forEach items="${allCategories}" var="category">
 				<c:set var="categoryId" value="${category.categoryId}" scope="page"/>
 				<tr>
-					<th>&emsp;${category.categoryName}<br>&emsp;<a href="${pageContext.request.contextPath}/showAddItem?categoryId=${categoryId}">Add Item</a></th>
+					<th>&emsp;${category.categoryName}</th>
 					<td>
 						<!-- Items -->
 						<table>
@@ -40,16 +40,22 @@
 									<c:when test="${itemCatId == categoryId}">
 										<tr>
 											<td>&emsp;${item.itemName}</td>
-											<td>&emsp;&emsp;${item.price}</td>
+											<td>&emsp;&emsp;$${item.price}</td>
 											<td>&emsp;<a href="${pageContext.request.contextPath}/showEditItem?itemId=${item.itemId}">Edit</a></td>
 										</tr>
 									</c:when>
 								</c:choose>
 							</c:forEach>
+							
+							<tr>
+								<th>&emsp;<a href="${pageContext.request.contextPath}/showAddItem?categoryId=${categoryId}">Add Item</a></th>
+							</tr>
 						</table>
 						<!-- End of items -->
-						
 					</td>
+					
+					<th>&emsp;<a href="${pageContext.request.contextPath}/showEditCategory?categoryId=${categoryId}">Edit Category</a> </th>
+					
 				</tr>
 			</c:forEach>
 			

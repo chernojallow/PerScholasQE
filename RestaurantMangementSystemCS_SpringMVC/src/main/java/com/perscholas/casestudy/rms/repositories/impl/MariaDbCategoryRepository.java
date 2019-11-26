@@ -26,8 +26,7 @@ public class MariaDbCategoryRepository implements CategoryRepository {
 
 	@Override
 	public List<Category> getAllByAddressId(Integer addressId) {
-		String selectById = "SELECT c.categoryId, c.categoryName FROM `category` c JOIN item i ON c.categoryId = i.categoryId JOIN address a ON i.addressId = a.addressId WHERE a.addressId = "
-				+ addressId + " GROUP BY categoryId;";
+		String selectById = "SELECT * FROM `category` WHERE `addressId` = " + addressId;
 		List<Category> result = mariaDbJdbcTemplate.query(selectById, new CategoryMapper());
 		return result;
 	}
@@ -37,7 +36,8 @@ public class MariaDbCategoryRepository implements CategoryRepository {
 		Integer id = -1;
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("categoryName", category.getCategoryName());
-		String insertSql = "INSERT INTO category (`categoryName`) VALUES (:categoryName);";
+		params.addValue("addressId", category.getAddressId());
+		String insertSql = "INSERT INTO category (`categoryName`, `addressId`) VALUES (:categoryName, :addressId);";
 
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		Integer createResult = mariaDbJdbcTemplate.update(insertSql, params, keyHolder);
@@ -96,6 +96,7 @@ public class MariaDbCategoryRepository implements CategoryRepository {
 			Category category = new Category();
 			category.setCategoryId(rs.getInt(1));
 			category.setCategoryName(rs.getString(2));
+			category.setAddressId(rs.getInt(3));
 			return category;
 		}
 	}

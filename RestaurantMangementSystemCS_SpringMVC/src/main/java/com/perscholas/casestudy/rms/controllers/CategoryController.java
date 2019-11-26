@@ -1,6 +1,8 @@
 package com.perscholas.casestudy.rms.controllers;
 
-import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +20,28 @@ import com.perscholas.casestudy.rms.repositories.CategoryRepository;
 public class CategoryController {
 	@Autowired
 	private CategoryRepository cRep;
-	
+
 	@GetMapping("/showAddCategory")
 	public String showAddCategory(Model model) {
 		model.addAttribute("category", new Category());
 		return "AddCategory";
 	}
-	
+
 	@PostMapping("addCategory")
-	public String addCategory(@Valid @ModelAttribute("category") Category category, BindingResult result) {
-		
-		return null;
+	public String addCategory(@Valid @ModelAttribute("category") Category category, BindingResult result, Model model)
+			throws ClassNotFoundException, SQLException, IOException {
+		if (result.hasErrors()) {
+			return "AddCategory";
+		}
+
+		category.setCategoryId(cRep.create(category));
+
+		if (category.getCategoryId() == -1) {
+			model.addAttribute("errorMessage", "Create category failed");
+			return "AddCategory";
+		}
+
+		return "redirect:/showSetup";
 	}
-	
+
 }

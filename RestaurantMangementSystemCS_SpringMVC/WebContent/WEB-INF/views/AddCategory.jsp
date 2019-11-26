@@ -14,10 +14,12 @@
 <body>
 	<h1>&emsp;Add Category</h1>
 	<p>&emsp;<%@ include file="Navigation.jsp" %> </p>
+	<p class="error">${errorMessage}</p>
 	
 	<form:form action="${pageContext.request.contextPath}/addCategory" method="post" modelAttribute="category">
 		<fieldset>
-			<%-- <form:input path="categoryId" type="hidden" value="-1"/> --%>
+			<form:input path="categoryId" type="hidden" value="-1"/>
+			<form:input path="addressId" type="hidden" value="${currentUser.addressId}"/>
 			
 			<p> <label>&emsp;Category Name:&nbsp;<form:input path="categoryName" placeholder="name" required="required"/> </label> </p>
 			<p> <form:errors path="categoryName" class="error" /> </p>

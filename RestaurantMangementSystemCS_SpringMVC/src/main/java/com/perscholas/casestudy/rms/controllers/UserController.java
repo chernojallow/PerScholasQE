@@ -90,9 +90,7 @@ public class UserController {
 		if (result.hasErrors()) {
 			return "Registration";
 		}
-
-		System.out.println(reg.toString());
-
+		
 		Integer addressId = aRep.create(
 				new Address(reg.getAddress1(), reg.getAddress2(), reg.getCity(), reg.getState(), reg.getPostalCode()));
 		if (addressId == -1) {
@@ -100,7 +98,6 @@ public class UserController {
 			return "Registration";
 		}
 
-		System.out.println("Address ID: " + addressId);
 		User u = uRep.getByName(reg.getUsername());
 
 		if (u != null) {
@@ -116,7 +113,6 @@ public class UserController {
 			return "Registration";
 		}
 
-		System.out.println("User ID: " + userId);
 		model.addAttribute("successMessage", "Successfully registered");
 
 		return "redirect:/login";
@@ -184,6 +180,7 @@ public class UserController {
 		model.addAttribute("nbrOfTables", tRep.getNbrOfTablesByAddressId(u.getAddressId()));
 		model.addAttribute("allCategories", cRep.getAllByAddressId(u.getAddressId()));
 		model.addAttribute("allItems", iRep.getAllByAddressId(u.getAddressId()));
+		
 		return "Setup";
 	}
 	
