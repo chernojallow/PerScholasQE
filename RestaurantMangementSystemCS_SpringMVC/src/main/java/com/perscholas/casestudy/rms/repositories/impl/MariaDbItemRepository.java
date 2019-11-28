@@ -26,7 +26,7 @@ public class MariaDbItemRepository implements ItemRepository {
 
 	@Override
 	public List<Item> getAllByAddressId(Integer addressId) throws SQLException {
-		String selectGetAll = "SELECT i.itemId, i.itemName, i.categoryId, i.addressId, i.price FROM item i JOIN address a ON i.addressId = a.addressId WHERE i.addressId = " + addressId;
+		String selectGetAll = "SELECT i.itemId, i.itemName, i.categoryId, i.price FROM `item` i JOIN `category` c ON i.categoryId = c.categoryId WHERE c.addressId = " + addressId;
 		List<Item> result = mariaDbJdbcTemplate.query(selectGetAll, new ItemMapper());
 		return result;
 	}
@@ -36,9 +36,9 @@ public class MariaDbItemRepository implements ItemRepository {
 		Integer id = -1;
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("itemName", item.getItemName());
-		params.addValue("price", item.getPrice());
 		params.addValue("categoryId", item.getCategoryId());
-		String createSql = "INSERT INTO item (`itemName`, `price`, `categoryId`) VALUES (:itemName, :price, :categoryId);";
+		params.addValue("price", item.getPrice());
+		String createSql = "INSERT INTO item (`itemName`, `categoryId`, `price`) VALUES (:itemName, :categoryId, :price);";
 
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		Integer createResult = mariaDbJdbcTemplate.update(createSql, params, keyHolder);

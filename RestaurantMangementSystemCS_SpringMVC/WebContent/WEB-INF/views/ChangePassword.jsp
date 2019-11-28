@@ -16,18 +16,16 @@
 	<p>&emsp;<%@ include file="Navigation.jsp" %> </p>
 	
 	<form:form action="${pageContext.request.contextPath}/changePassword" method="post" modelAttribute="user">
-		<fieldset>
-			<p>&emsp;Current Password: ${currentUser.password} </p>
-			<form:input path="userId" type="hidden" value="${currentUser.userId}"/>
-			<form:input path="username" type="hidden" value="${currentUser.username}"/>
-			<form:input path="addressId" type="hidden" value="${currentUser.addressId}"/>
-			<form:input path="role" type="hidden" value="${currentUser.role}"/>
-			
-			<p> <label>&emsp;Password:&nbsp;<form:input path="password" type="password" placeholder="password123" required="required"/> </label> </p>
-			<p> <form:errors path="password" class="error"/> </p>
-			
-			<p>&emsp;<input type="submit" value="Change Password" /> </p>	
-		</fieldset>
+		<p>&emsp;Current Password: ${currentUser.password} </p>
+		<form:input path="userId" type="hidden" value="${currentUser.userId}"/>
+		<form:input path="username" type="hidden" value="${currentUser.username}"/>
+		<form:input path="addressId" type="hidden" value="${currentUser.addressId}"/>
+		<form:input path="role" type="hidden" value="${currentUser.role}"/>
+		
+		<p> <label>&emsp;Password:&nbsp;<form:input path="password" type="password" placeholder="password123" required="required"/> </label> </p>
+		<p> <form:errors path="password" class="error"/> </p>
+		
+		<p>&emsp;<input type="submit" value="Change Password" /> </p>
 	</form:form>
 	
 	<p>&emsp;<a href="${pageContext.request.contextPath}/showProfile">Return to Profile</a> </p>

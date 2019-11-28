@@ -32,7 +32,7 @@ CREATE TABLE `order` (
 	`orderId` INT NOT NULL AUTO_INCREMENT,
 	`addressId` INT NOT NULL,
 	`start` DATETIME NOT NULL,
-	`end` DATETIME DEFAULT NULL,
+	`end` DATETIME,
 	PRIMARY KEY (`orderId`),
 	CONSTRAINT `order_fk_addressId` FOREIGN KEY (`addressId`)
 		REFERENCES `address` (`addressId`)
@@ -58,14 +58,10 @@ CREATE TABLE `item` (
 	`itemId` INT NOT NULL AUTO_INCREMENT,
 	`itemName` VARCHAR(50) NOT NULL,
 	`categoryId` INT NOT NULL,
-	`addressId` INT NOT NULL,
 	`price` DOUBLE NOT NULL,
 	PRIMARY KEY (`itemId`),
 	CONSTRAINT `item_fk_categoryId` FOREIGN KEY (`categoryId`)
 		REFERENCES `category` (`categoryId`)
-			ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `item_fk_addressId` FOREIGN KEY (`addressId`)
-		REFERENCES `address` (`addressId`)
 			ON UPDATE CASCADE ON DELETE CASCADE
 ) DEFAULT CHARSET=UTF8;
 
@@ -88,7 +84,11 @@ DROP TABLE if EXISTS `category`;
 CREATE TABLE `category` (
 	`categoryId` INT NOT NULL AUTO_INCREMENT,
 	`categoryName` VARCHAR(50) NOT NULL,
-	PRIMARY KEY (`categoryId`)
+	`addressId` INT NOT NULL,
+	PRIMARY KEY (`categoryId`),
+	CONSTRAINT `c_fk_addressId` FOREIGN KEY (`addressId`)
+		REFERENCES `address` (`addressId`)
+			ON UPDATE CASCADE ON DELETE CASCADE
 ) DEFAULT CHARSET=UTF8;
 
 /* address */
@@ -115,22 +115,24 @@ INSERT INTO `table` (`addressId`, `tableId`) VALUES (3, 2);
 INSERT INTO `table` (`addressId`, `tableId`) VALUES (3, 3);
 
 /* category */
-INSERT INTO `category` (`categoryName`) VALUES ('category1');
-INSERT INTO `category` (`categoryName`) VALUES ('category2');
-INSERT INTO `category` (`categoryName`) VALUES ('category3');
-INSERT INTO `category` (`categoryName`) VALUES ('category4');
+INSERT INTO `category` (`categoryName`, `addressId`) VALUES ('category1', 1);
+INSERT INTO `category` (`categoryName`, `addressId`) VALUES ('category2', 1);
+INSERT INTO `category` (`categoryName`, `addressId`) VALUES ('category3', 2);
+INSERT INTO `category` (`categoryName`, `addressId`) VALUES ('category4', 2);
+INSERT INTO `category` (`categoryName`, `addressId`) VALUES ('category5', 3);
+INSERT INTO `category` (`categoryName`, `addressId`) VALUES ('category5', 3);
 
-INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item10', 11.11, 4, 1);
 /* item */
-INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item1', 11.11, 1, 1);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item2', 2.22, 1, 1);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item3', 33.33, 1, 1);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item4', 44.44, 2, 2);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item5', 55.55, 2, 2);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item6', 6.6, 2, 2);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item7', 7.77, 3, 3);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item8', 88.8, 3, 3);
-INSERT INTO `item` (`itemName`, `price`, `categoryId`, `addressId`) VALUES ('item9', .99, 3, 3);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item1', 11.11, 1);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item2', 2.22, 1);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item3', 33.33, 1);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item4', 44.44, 2);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item5', 55.55, 2);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item6', 6.6, 2);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item7', 7.77, 3);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item8', 88.8, 3);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item9', .99, 3);
+INSERT INTO `item` (`itemName`, `price`, `categoryId`) VALUES ('item10', 11.11, 4);
 
 /* order_items */
 INSERT INTO `order_items` (`orderId`, `itemId`, `quantity`, `subtotal`) VALUES (1, 1, 1, ROUND((SELECT `price` FROM `item` WHERE `itemId` = 1) * 1, 2));
