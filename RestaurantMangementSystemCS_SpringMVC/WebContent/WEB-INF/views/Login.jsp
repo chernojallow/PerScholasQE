@@ -13,23 +13,21 @@
 </head>
 <body>
 	<h1>&emsp;Login Page</h1>
-	<p style="color: green;">${successMessage}</p>
-	<p style="color: red;">${errorMessage}</p>
+	<p class="text-success">&emsp;${successMessage}</p>
+	<p class="text-danger">&emsp;${errorMessage}</p>
 	
 	<form:form action="${pageContext.request.contextPath}/loginUser" method="post" modelAttribute="login">
-		<fieldset>
-			<form:input path="userId" type="hidden" value="-1"/>
-			<form:input path="addressId" type="hidden" value="-1"/>
-			<form:input path="role" type="hidden" value="-1"/>
-			
-			<p> <label>&emsp;Username:&nbsp;<form:input path="username" placeholder="username123" required="required"/> </label> </p>
-			<p> <form:errors path="username" class="error"/> </p>
-			
-			<p> <label>&emsp;Password:&nbsp;<form:input path="password" type="password" placeholder="password123" required="required"/> </label> </p>
-			<p> <form:errors path="password" class="error"/> </p>
-			
-			<p>&emsp;<input type="submit" value="Login" />&emsp;<input type="reset" value="Clear"/></p>
-		</fieldset>
+		<form:input path="userId" type="hidden" value="-1"/>
+		<form:input path="addressId" type="hidden" value="-1"/>
+		<form:input path="role" type="hidden" value="-1"/>
+		
+		<p> <label>&emsp;Username:&nbsp;<form:input path="username" placeholder="username123" required="required"/> </label> </p>
+		<p> <form:errors path="username" class="error"/> </p>
+		
+		<p> <label>&emsp;Password:&nbsp;<form:input path="password" type="password" placeholder="password123" required="required"/> </label> </p>
+		<p> <form:errors path="password" class="error"/> </p>
+		
+		<p>&emsp;<input type="submit" value="Login" />&emsp;<input type="reset" value="Clear"/></p>
 	</form:form>
 	
 	<p>&emsp;<a href="${pageContext.request.contextPath}/register">Register Here</a> </p>

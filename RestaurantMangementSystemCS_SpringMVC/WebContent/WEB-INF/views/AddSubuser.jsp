@@ -16,24 +16,22 @@
 	<p>&emsp;<%@ include file="Navigation.jsp" %> </p>
 	
 	<form:form action="${pageContext.request.contextPath}/registerSubuser" method="post" modelAttribute="subuser">
-		<fieldset>
-			<form:input path="userId" type="hidden" value="-1"/>
-			<form:input path="addressId" type="hidden" value="${currentUser.addressId}"/>
-			
-			<p> <label>&emsp;Username:&nbsp;<form:input path="username" placeholder="username123" required="required"/> </label> </p>
-			<p> <form:errors path="username" class="error" /> </p>
-			
-			<p> <label>&emsp;Password:&nbsp;<form:input path="password" type="password" placeholder="password123" required="required" /> </label> </p>
-			<p> <form:errors path="password" class="error" /> </p>
-			
-			<p> <label>&emsp;Role:&nbsp;<form:select path="role">
-				<option value="2">Manager</option>
-				<option value="3">Waiter/Waitress</option>
-			</form:select> </label> <p>
-			<p> <form:errors path="role" class="error" /> </p>
-			
-			<p>&emsp;<input type=submit value="Register" />&emsp;<input type="reset" value="Clear"/> </p>
-		</fieldset>
+		<form:input path="userId" type="hidden" value="-1"/>
+		<form:input path="addressId" type="hidden" value="${currentUser.addressId}"/>
+		
+		<p> <label>&emsp;Username:&nbsp;<form:input path="username" placeholder="username123" required="required"/> </label> </p>
+		<p> <form:errors path="username" class="error" /> </p>
+		
+		<p> <label>&emsp;Password:&nbsp;<form:input path="password" type="password" placeholder="password123" required="required" /> </label> </p>
+		<p> <form:errors path="password" class="error" /> </p>
+		
+		<p> <label>&emsp;Role:&nbsp;<form:select path="role">
+			<option value="2">Manager</option>
+			<option value="3">Waiter/Waitress</option>
+		</form:select> </label> <p>
+		<p> <form:errors path="role" class="error" /> </p>
+		
+		<p>&emsp;<input type=submit value="Register" />&emsp;<input type="reset" value="Clear"/> </p>
 	</form:form>
 	
 	<p>&emsp;<a href="${pageContext.request.contextPath}/showProfile">Return to Profile</a> </p>

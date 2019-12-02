@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.perscholas.casestudy.rms.models.Category;
 import com.perscholas.casestudy.rms.repositories.CategoryRepository;
@@ -27,7 +28,7 @@ public class CategoryController {
 		return "AddCategory";
 	}
 
-	@PostMapping("addCategory")
+	@PostMapping("/addCategory")
 	public String addCategory(@Valid @ModelAttribute("category") Category category, BindingResult result, Model model)
 			throws ClassNotFoundException, SQLException, IOException {
 		if (result.hasErrors()) {
@@ -44,4 +45,28 @@ public class CategoryController {
 		return "redirect:/showSetup";
 	}
 
+	@GetMapping("/showEditCategory")
+	public String showEditCategory(@RequestParam Integer categoryId, Model model)
+			throws ClassNotFoundException, IOException, SQLException {
+		model.addAttribute("category", cRep.getById(categoryId));
+		model.addAttribute("newCategory", new Category());
+		return "EditCategory";
+	}
+
+	@GetMapping("/deleteCategory")
+	public String deleteCategory(@RequestParam Integer categoryId) throws IOException, SQLException {
+		cRep.remove(categoryId);
+		return "redirect:/showSetup";
+	}
+
+	@PostMapping("/editCategory")
+	public String editCategory(@Valid @ModelAttribute("newCategory") Category category, BindingResult result)
+			throws ClassNotFoundException, SQLException, IOException {
+		if (result.hasErrors()) {
+			return "EditCategory";
+		}
+
+		cRep.update(category);
+		return "redirect:/showSetup";
+	}
 }

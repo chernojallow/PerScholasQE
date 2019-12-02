@@ -6,10 +6,10 @@
 	&emsp;<a href="${pageContext.request.contextPath}/welcome">Welcome</a>
 	&emsp;<a href="${pageContext.request.contextPath}/showTables">Tables</a>
 	&emsp;<a href="${pageContext.request.contextPath}/showProfile">Profile</a>
-	<c:choose>
-		<c:when test="${currentUser.role <= 2}">
-			&emsp;<a href="${pageContext.request.contextPath}/showSetup">Setup</a>
-		</c:when>
-	</c:choose>
+	
+	<c:if test="${currentUser.role <= 2}">
+		&emsp;<a href="${pageContext.request.contextPath}/showSetup">Setup</a>
+	</c:if>
+	
 	&emsp;<a href="${pageContext.request.contextPath}/logout">Logout</a>
 </nav>

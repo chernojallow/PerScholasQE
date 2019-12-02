@@ -31,13 +31,13 @@ public class UserController {
 
 	@Autowired
 	private AddressRepository aRep;
-	
+
 	@Autowired
 	private TableRepository tRep;
-	
+
 	@Autowired
 	private CategoryRepository cRep;
-	
+
 	@Autowired
 	private ItemRepository iRep;
 
@@ -90,7 +90,7 @@ public class UserController {
 		if (result.hasErrors()) {
 			return "Registration";
 		}
-		
+
 		Integer addressId = aRep.create(
 				new Address(reg.getAddress1(), reg.getAddress2(), reg.getCity(), reg.getState(), reg.getPostalCode()));
 		if (addressId == -1) {
@@ -167,29 +167,23 @@ public class UserController {
 		if (result.hasErrors()) {
 			return "ChangePassword";
 		}
-		
+
 		uRep.create(subuser);
-		
+
 		return "redirect:/showProfile";
 	}
 
 	@GetMapping("/showSetup")
-	public String showSetup(HttpSession session, Model model) throws ClassNotFoundException, IOException, SQLException {		
+	public String showSetup(HttpSession session, Model model) throws ClassNotFoundException, IOException, SQLException {
 		User u = (User) session.getAttribute("currentUser");
 		model.addAttribute("tables", Integer.class);
 		model.addAttribute("nbrOfTables", tRep.getNbrOfTablesByAddressId(u.getAddressId()));
 		model.addAttribute("allCategories", cRep.getAllByAddressId(u.getAddressId()));
 		model.addAttribute("allItems", iRep.getAllByAddressId(u.getAddressId()));
-		
+
 		return "Setup";
 	}
-	
-	@PostMapping("/setup")
-	public String setup() {
-		
-		return null;
-	}
-	
+
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();

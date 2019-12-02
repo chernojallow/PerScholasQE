@@ -1,7 +1,6 @@
 package com.perscholas.test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Test {
@@ -11,7 +10,5 @@ public class Test {
 		d.add("hello");
 		d.add("hey");
 		d.add("hi");
-		
-		
 	}
 }

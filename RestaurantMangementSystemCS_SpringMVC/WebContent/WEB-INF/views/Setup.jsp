@@ -36,15 +36,13 @@
 						<table>
 							<c:forEach items="${allItems}" var="item">
 								<c:set var="itemCatId" value="${item.categoryId}" scope="page"/>
-								<c:choose>
-									<c:when test="${itemCatId == categoryId}">
-										<tr>
-											<td>&emsp;${item.itemName}</td>
-											<td>&emsp;&emsp;$${item.price}</td>
-											<td>&emsp;<a href="${pageContext.request.contextPath}/showEditItem?itemId=${item.itemId}">Edit</a></td>
-										</tr>
-									</c:when>
-								</c:choose>
+								<c:if test="${itemCatId == categoryId}">
+									<tr>
+										<td>&emsp;${item.itemName}</td>
+										<td>&emsp;&emsp;$${item.price}</td>
+										<td>&emsp;<a href="${pageContext.request.contextPath}/showEditItem?itemId=${item.itemId}">Edit</a></td>
+									</tr>
+								</c:if>
 							</c:forEach>
 							
 							<tr>
