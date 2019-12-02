@@ -16,7 +16,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 @RunWith(Cucumber.class)
 public class SignupTestDefinition {
 	private WebDriver driver;
-	private WebElement element = null;
 
 	@Given("^the user navigates to the Signup page$")
 	public void the_user_navigates_to_the_signup_page() throws Throwable {
@@ -42,7 +41,7 @@ public class SignupTestDefinition {
 
 	@Then("^the page should direct to Success page$")
 	public void the_page_should_direct_to_success_page() throws Throwable {
-		element = 
+		String actual = 
 		assertEquals()
 	}
 }
