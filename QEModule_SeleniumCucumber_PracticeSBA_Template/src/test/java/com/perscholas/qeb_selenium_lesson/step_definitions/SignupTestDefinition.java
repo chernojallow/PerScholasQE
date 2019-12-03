@@ -10,7 +10,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 @RunWith(Cucumber.class)
@@ -18,13 +17,12 @@ public class SignupTestDefinition {
 	private WebDriver driver;
 
 	@Given("^the user navigates to the Signup page$")
-	public void the_user_navigates_to_the_signup_page() throws Throwable {
-		System.out.println("User navigates to the Signup page");
-
+	public void the_user_navigates_to_the_Signup_page() throws Throwable {
+		driver = new ChromeDriver();
 		System.setProperty("webdriver.chrome.driver",
 				"C:\\Users\\Student\\Documents\\GitHub\\PerScholasQE\\ChromeSeleniumDriver\\chromedriver.exe");
 
-		driver = new ChromeDriver();
+		System.out.println("User navigates to the Signup Page");
 		driver.get("http://localhost:8080/qeb_selenium_lesson/");
 
 		driver.findElement(By.cssSelector("#name_input")).sendKeys("xiaolin996");
@@ -35,13 +33,14 @@ public class SignupTestDefinition {
 	}
 
 	@When("^the user clicks the \"([^\"]*)\" button$")
-	public void the_user_clicks_the_something_button(String strArg1) throws Throwable {
+	public void the_user_clicks_the_button(String arg1) throws Throwable {
 		driver.findElement(By.cssSelector("#signup_form > div:nth-child(8) > input[type=submit]")).click();
+
 	}
 
 	@Then("^the page should direct to Success page$")
-	public void the_page_should_direct_to_success_page() throws Throwable {
-		String actual = 
-		assertEquals()
+	public void the_page_should_direct_to_Success_page() throws Throwable {
+		assertEquals(driver.getTitle(), "Success Page");
+		driver.close();
 	}
 }

@@ -1,6 +1,6 @@
-Feature: User fills out the Sign-up page
+Feature: User fills out the Signup page
 
-Scenario: The page should be filled
+Scenario: The page title should be "Sucess Page"
 Given the user navigates to the Signup page
 When the user clicks the "Submit" button
 Then the page should direct to Success page
