@@ -1,14 +1,18 @@
 package com.perscholas.test;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Test {
 	public static void main(String[] args) {
-		List<String> d = new ArrayList<String>(); 
+		LocalDateTime ldt = LocalDateTime.now();
+		//System.out.println(ldt.toString());
+		String str = ldt.toString();
 		
-		d.add("hello");
-		d.add("hey");
-		d.add("hi");
+		Timestamp ts = Timestamp.valueOf(LocalDateTime.parse(str));
+		System.out.println(ts.toString());
+		
 	}
 }

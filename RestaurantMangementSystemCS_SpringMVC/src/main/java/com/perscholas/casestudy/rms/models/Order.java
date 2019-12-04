@@ -17,15 +17,13 @@ public class Order {
 	@NotNull(message = "Start is required.")
 	private Timestamp start;
 
-	@NotNull(message = "End is required.")
 	private Timestamp end;
 
 	public Order() {
 	}
 
 	public Order(Integer orderId, @NotNull(message = "User Id is required.") Integer addressId,
-			@NotNull(message = "Start is required.") Timestamp start,
-			@NotNull(message = "End is required.") Timestamp end) {
+			@NotNull(message = "Start is required.") Timestamp start, Timestamp end) {
 		this.orderId = orderId;
 		this.addressId = addressId;
 		this.start = start;

@@ -2,7 +2,7 @@ package com.perscholas.casestudy.rms.repositories;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Map;
 
 import com.perscholas.casestudy.rms.models.Order;
 
@@ -15,5 +15,7 @@ public interface OrderRepository {
 	
 	Boolean remove(Integer orderId) throws IOException, SQLException;
 
-	List<Order> getAllByAddressId(Integer addressId) throws SQLException;
+	
+	Map<Integer, Order> getAllByOnTable(Integer addressId);
+	//List<Order> getAllByOnTable(Integer addressId);
 }

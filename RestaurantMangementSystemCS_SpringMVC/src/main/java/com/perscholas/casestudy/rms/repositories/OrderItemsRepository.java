@@ -8,7 +8,7 @@ import com.perscholas.casestudy.rms.models.OrderItems;
 
 public interface OrderItemsRepository {
 	List<OrderItems> getAllByAddressIdOnTable(Integer tableId) throws SQLException;
-	
+
 	List<OrderItems> getAllByAddressId(Integer addressId) throws SQLException;
 
 	Boolean create(OrderItems orderItem) throws SQLException, ClassNotFoundException, IOException;

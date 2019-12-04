@@ -8,19 +8,20 @@ public class Table {
 	@Id
 	@GeneratedValue
 	private Integer tableId;
-	
+
 	@NotNull(message = "Address Id is required.")
 	private Integer addressId;
-	
+
 	private Integer orderId;
 
-	public Table() {}
+	public Table() {
+	}
 
 	public Table(Integer tableId, @NotNull(message = "Address Id is required.") Integer addressId) {
 		this.tableId = tableId;
 		this.addressId = addressId;
 	}
-	
+
 	public Table(Integer tableId, @NotNull(message = "Address Id is required.") Integer addressId, Integer orderId) {
 		this.tableId = tableId;
 		this.addressId = addressId;

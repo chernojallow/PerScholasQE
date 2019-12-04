@@ -23,13 +23,27 @@ import com.perscholas.casestudy.rms.repositories.OrderRepository;
 public class MariaDbOrderRepository implements OrderRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate mariaDbJdbcTemplate;
-	
+
 	@Override
-	public List<Order> getAllByAddressId(Integer addressId) throws SQLException {
-		String selectGetAll = "SELECT * FROM `order` WHERE `addressId` = " + addressId;
-		List<Order> result = mariaDbJdbcTemplate.query(selectGetAll, new OrderMapper());
+	public Map<Integer, Order> getAllByOnTable(Integer addressId) {
+		String selectGetAll = "SELECT o.orderId, o.addressId, o.`start`, o.`end` FROM `order` o JOIN `table` t ON o.orderId = t.orderId WHERE o.addressId = "
+				+ addressId + " order BY t.tableId;";
+		List<Order> oList = mariaDbJdbcTemplate.query(selectGetAll, new OrderMapper());
+		Map<Integer, Order> result = new HashMap<Integer, Order>();
+
+		for (Order o : oList)
+			result.put(o.getOrderId(), o);
+
 		return result;
 	}
+
+//	@Override
+//	public List<Order> getAllByOnTable(Integer addressId) {
+//		String selectGetAll = "SELECT o.orderId, o.addressId, o.`start`, o.`end` FROM `order` o JOIN `table` t ON o.orderId = t.orderId WHERE o.addressId = "
+//				+ addressId + " order BY t.tableId;";
+//		List<Order> result = mariaDbJdbcTemplate.query(selectGetAll, new OrderMapper());
+//		return result;
+//	}
 
 	@Override
 	public Integer create(Order order) throws SQLException, ClassNotFoundException, IOException {
@@ -54,13 +68,13 @@ public class MariaDbOrderRepository implements OrderRepository {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("orderId", orderId);
 		Order order = null;
-		
+
 		try {
 			order = (Order) mariaDbJdbcTemplate.queryForObject(selectById, params, new OrderMapper());
 		} catch (EmptyResultDataAccessException e) {
 			System.out.println(e.getMessage());
 		}
-		
+
 		return order;
 	}
 
@@ -72,7 +86,7 @@ public class MariaDbOrderRepository implements OrderRepository {
 		params.put("start", order.getStart());
 		params.put("end", order.getEnd());
 		params.put("orderId", order.getOrderId());
-		
+
 		String updateSql = "UPDATE `order` SET `addressId` = :addressId, `time` = :time WHERE `orderId` = :orderId;";
 		result = mariaDbJdbcTemplate.update(updateSql, params);
 
@@ -101,7 +115,7 @@ public class MariaDbOrderRepository implements OrderRepository {
 			order.setOrderId(rs.getInt(1));
 			order.setAddressId(rs.getInt(2));
 			order.setStart(rs.getTimestamp(3));
-			order.setStart(rs.getTimestamp(4));
+			order.setEnd(rs.getTimestamp(4));
 			return order;
 		}
 	}

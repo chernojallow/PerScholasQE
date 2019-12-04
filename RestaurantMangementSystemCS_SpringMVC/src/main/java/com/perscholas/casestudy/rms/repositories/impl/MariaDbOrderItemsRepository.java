@@ -29,6 +29,7 @@ public class MariaDbOrderItemsRepository implements OrderItemsRepository {
 		String selectGetAll = "SELECT order_items.orderId, order_items.itemId, order_items.quantity, order_items.subtotal FROM order_items JOIN `order` ON order_items.orderId = `order`.orderId JOIN `table` ON `order`.orderId = `table`.orderId JOIN address ON `table`.addressId = address.addressId WHERE address.addressId = "
 				+ tableId;
 		List<OrderItems> result = mariaDbJdbcTemplate.query(selectGetAll, new OrderItemsMapper());
+
 		return result;
 	}
 
